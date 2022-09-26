@@ -10,7 +10,7 @@ const PrivateRoutes = [
   {
     path: '/dashboard',
     key: 'dashboard',
-    label: 'Trang chủ',
+    label: 'Dashboard',
     icon: Dashboard,
   },
   {

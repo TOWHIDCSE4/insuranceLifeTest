@@ -1,5 +1,5 @@
 import {createSlice, isPending, isRejected, isFulfilled} from '@reduxjs/toolkit';
-import {LOADING_STATUS} from '../ultis/constant'
+import {LOADING_STATUS, HTTP_400} from '../ultis/constant'
 
 const initialState = {
   loading: LOADING_STATUS.idle,
@@ -24,7 +24,7 @@ const loadingSlice = createSlice({
     ).addMatcher(
       isRejected(),
       (state, action) => {
-        if (!!action.payload?.errors) {
+        if (action.payload?.statusCode === HTTP_400) {
           return ({...state, ...{ loading: LOADING_STATUS.failed, errors: action.payload?.errors}})
         } else {
           return ({...state, ...{ loading: LOADING_STATUS.failed, message: action.payload?.message}})

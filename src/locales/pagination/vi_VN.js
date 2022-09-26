@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _default = {
   // Options.jsx
-  items_per_page: '',
+  items_per_page: '/ trang',
   jump_to: 'Đến',
   jump_to_confirm: 'xác nhận',
   page: 'Trang',

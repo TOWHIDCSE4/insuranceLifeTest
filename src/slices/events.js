@@ -67,11 +67,6 @@ export const deleteData = createAsyncThunk(
 const eventsSlice = createSlice({
   name: 'events',
   initialState,
-  reducers: {
-    resetEvents: (state) => {
-      state.data = [];
-    },
-  },
   extraReducers: builder => {
     builder.addMatcher(
       isFulfilled(getData, createData, updateData, deleteData),
@@ -83,5 +78,5 @@ const eventsSlice = createSlice({
 });
 
 const {reducer} = eventsSlice;
-export const {resetEvents} = eventsSlice.actions;
+
 export default reducer;

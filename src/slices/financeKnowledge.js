@@ -29,13 +29,11 @@ export const mostViewArticles = createAsyncThunk(
     }
   }
 );
-
 export const getView = createAsyncThunk(
   'financeKnowledge/view',
   async (id, { rejectWithValue }) => {
     try {
       await view(id);
-      return { message: '' };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

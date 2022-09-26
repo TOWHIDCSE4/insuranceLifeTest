@@ -14,13 +14,13 @@ const FooterPassword = ({
     <div className="footer-password">
       <Button
         danger
-        className="btn-danger footer-password__btnCancel"
+        className="btn-danger footer-password__btn"
         onClick={handleCancel}
       >
         {textCancel}
       </Button>
       <Button
-        className="btn-primary footer-password__btnSend"
+        className="btn-primary footer-password__btn"
         type="primary"
         onClick={handleSubmit && handleSubmit}
         htmlType={typeSubmit ? "submit" : "button"}

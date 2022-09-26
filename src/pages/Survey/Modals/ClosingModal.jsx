@@ -1,47 +1,67 @@
-import React, { useState } from "react";
 import { Button, Popover, Divider, Form, Input } from "antd";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const ClosingModal = ({ onSubmit }) => {
+export const ClosingModal = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
 
   const handleOpenChange = (newOpen) => {
+    console.log(newOpen);
     setOpen(newOpen);
   };
 
-  const onCancel = () => {
-    setOpen(false);
+  const onFinish = (values) => {
+    console.log("Success:", values);
   };
 
-  const onOk = () => {
-    onSubmit(name);
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   const content = (
     <div className="closing-container">
-      <div className="closing-body">
-        <div className="form-group">
-          <Form.Item label="Tên gợi nhớ" name="reminiscent_name" labelCol={{ span: 24 }}>
-            <Input placeholder="Esther Howard" className="closing__input" onChange={(e) => setName(e.target.value)} />
-          </Form.Item>
+      <Form
+        name="closing"
+        initialValues={{
+          reminiscent_name: "",
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off">
+        <div className="closing-body">
+          <div className="form-group">
+            <Form.Item
+              label="Tên gợi nhớ"
+              name="reminiscent_name"
+              labelCol={{ span: 24 }}>
+              <Input placeholder="Esther Howard" className="closing__input" />
+            </Form.Item>
+          </div>
         </div>
-      </div>
-      <Divider />
-      <div className="closing-footer">
-        <div className="closing-btn">
-          <Button htmlType="button" className="btn-cancel" block onClick={onCancel} onBlur={onCancel}>
-            Hủy+
-          </Button>
-        </div>
+        <Divider />
+        <div className="closing-footer">
+          <div className="closing-btn">
+            <Button
+              type="primary"
+              htmlType="button"
+              className="btn-danger"
+              block>
+              Hủy+
+            </Button>
+          </div>
 
-        <div className="closing-btn">
-          <Button type="primary" htmlType="button" className="btn-primary" block onClick={onOk}>
-            Tạo
-          </Button>
+          <div className="closing-btn">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="btn-primary"
+              block>
+              Tạo
+            </Button>
+          </div>
         </div>
-      </div>
+      </Form>
     </div>
   );
   return (
@@ -50,10 +70,12 @@ export const ClosingModal = ({ onSubmit }) => {
       content={content}
       trigger="click"
       onOpenChange={handleOpenChange}
-      overlayClassName="closing-popover"
-      visible={open}
-    >
-      <Button type="primary" htmlType="button" className="btn-primary finance-btn-small" block>
+      overlayClassName="closing-popover">
+      <Button
+        type="primary"
+        htmlType="button"
+        className="btn-primary finance-btn-small"
+        block>
         {t("survey.save")}
       </Button>
     </Popover>

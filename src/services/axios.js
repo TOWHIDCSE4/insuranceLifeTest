@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
 import configs from '../config';
 
 const baseApiConfig = {
@@ -35,15 +36,11 @@ export const setupInterceptor = (_store) => {
 
 export const sendGet = (url, params) =>
   baseApiClient.get(url, { params }).then((res) => res);
-
 export const sendPost = (url, params) =>
   baseApiClient.post(url, params).then((res) => res);
-
 export const sendPut = (url, params) =>
   baseApiClient.put(url, params).then((res) => res);
-
 export const sendPatch = (url, params) =>
   baseApiClient.patch(url, params).then((res) => res);
-
 export const sendDelete = (url, params) =>
-  baseApiClient.delete(url, { data: params }).then((res) => res);
+  baseApiClient.delete(url, { data:params }).then((res) => res);

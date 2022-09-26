@@ -1,14 +1,15 @@
 import { Table } from 'antd';
-import React, { memo, useEffect, useState } from 'react';
+import React from 'react';
 import calendarIcon from '../../assets/images/icons/calendar.svg';
-import { getTimeByTZ } from '../../helper/index';
+import moment from 'moment';
+import { FORMAT_DATE, LOADING_STATUS } from '../../ultis/constant';
+import { memo } from 'react';
 
 const columns = [
   {
     title: 'Ngày',
     dataIndex: 'date',
     key: 'date',
-    width:'140px'
   },
   {
     title: 'Nội dung',
@@ -18,18 +19,6 @@ const columns = [
 ];
 
 const PaymentHistory = ({ customer }) => {
-  const format = new Intl.NumberFormat('vi-VN').format(customer?.amount);
-  const [history, setHistory] = useState(null)
-
-  useEffect(() => {
-    const histories = [];
-    histories.push({
-      date: getTimeByTZ(customer?.dueDate),
-      content: customer?.description,
-    });
-    setHistory(histories)
-  }, [customer]);
-
   return (
     <div className='paymentHistory'>
       {customer ? (
@@ -39,7 +28,7 @@ const PaymentHistory = ({ customer }) => {
               <div className='paymentHistory-title'>
                 <h4>{customer?.userFullname} </h4>
                 <p>
-                  Số tiền: <span>{format}</span>
+                  Số tiền: <span>{customer?.amount}</span>
                 </p>
               </div>
               <div className='paymentHistory-time'>
@@ -50,7 +39,7 @@ const PaymentHistory = ({ customer }) => {
                   </div>
                   <div className='paymentHistory-time_date'>
                     <span>
-                      {getTimeByTZ(customer?.startDate)}
+                      {moment(customer?.startDate).format(FORMAT_DATE)}
                     </span>
                   </div>
                 </div>
@@ -62,7 +51,7 @@ const PaymentHistory = ({ customer }) => {
                   </div>
                   <div className='paymentHistory-time_date'>
                     <span>
-                      {getTimeByTZ(customer?.startDate)}
+                      {moment(customer?.startDate).format(FORMAT_DATE)}
                     </span>
                   </div>
                 </div>
@@ -73,7 +62,7 @@ const PaymentHistory = ({ customer }) => {
                     <span>Ngày kết thúc</span>
                   </div>
                   <div className='paymentHistory-time_date'>
-                    <span>{getTimeByTZ(customer?.dueDate)}</span>
+                    <span>{moment(customer?.dueDate).format(FORMAT_DATE)}</span>
                   </div>
                 </div>
               </div>
@@ -83,10 +72,10 @@ const PaymentHistory = ({ customer }) => {
             <Table
               className='table-common'
               size='middle'
-              dataSource={history}
+              dataSource={customer?.histories}
               columns={columns}
               pagination={false}
-              rowKey='date'
+              rowKey={(record) => record.id}
             />
           </div>
         </>

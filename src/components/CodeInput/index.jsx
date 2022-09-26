@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { CODE_INPUT } from "../../constants/codeInput";
+import { CODE_INPUT } from "../../constans/codeInput";
 import { Input } from "antd";
 
 class CodeInput extends Component {
@@ -108,9 +108,9 @@ class CodeInput extends Component {
 
       const newTarget =
         this.textInput[
-        e.target.dataset.id < input.length
-          ? Number(e.target.dataset.id) + 1
-          : e.target.dataset.id
+          e.target.dataset.id < input.length
+            ? Number(e.target.dataset.id) + 1
+            : e.target.dataset.id
         ];
 
       if (newTarget) {

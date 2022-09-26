@@ -1,29 +1,86 @@
 import { Button, Checkbox, Form, Input, InputNumber } from "antd";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { postFinanceDatas } from "../../../slices/financeSolutions";
 
-const ListCalculation = () => {
+const ListCalculation = ({ finaceDatas }) => {
   const [Percent, setPercent] = useState(0);
   const [Amount, setAmount] = useState(0);
+  const [isPotential, setIsPotential] = useState(false);
   const [TotalAmount, setTotalAmount] = useState(0);
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    console.log(values);
-    navigate("/advise/financial-solutions/minh-hoa-gia");
-  };
+  // dispatch
+  const dispatch = useDispatch();
+
+  // setPercent
+  useEffect(() => {
+    if (finaceDatas !== "" || finaceDatas !== undefined) {
+      setPercent(finaceDatas?.illustration?.investmentRate);
+    } else {
+      setPercent(0);
+    }
+  }, [finaceDatas]);
+
+  // setAmount
   const onChange = (value) => {
     setAmount(value);
+  };
+  // setAmount
+  useEffect(() => {
+    if (isPotential === undefined) {
+      setIsPotential(false);
+    } else {
+      setIsPotential(true);
+    }
+  }, [finaceDatas]);
+  // setTotalAmount
+  useEffect(() => {
+    setTotalAmount((Amount * 12) / (Percent / 100));
+  }, [Amount, Percent]);
+
+  // submit data
+  const onFinish = async (values) => {
+    // console.log(values);
+    try {
+      if (values?.amount !== undefined && isPotential !== undefined) {
+        await dispatch(
+          postFinanceDatas({
+            fundId: finaceDatas?.id,
+            isPotential: isPotential,
+            result: {
+              key: "",
+              value: String(TotalAmount),
+            },
+            sumInsured: 1000000,
+            baseYears: 5,
+            basePremium: 20000,
+            investmentRate: 6,
+            riderPremium: 20000,
+            topUpPremium: 20000,
+            topUpYears: 10,
+            interestRate: {
+              key: "",
+              value: String(Percent),
+            },
+            expensePerMonth: {
+              key: "",
+              value: String(Amount),
+            },
+          })
+        );
+        navigate("/advise/financial-solutions/minh-hoa-gia");
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  useEffect(() => {
-    setTotalAmount(Amount * 12 / (Percent / 100));
-  }, [Amount, Percent]);
 
   return (
     <Form
@@ -33,7 +90,18 @@ const ListCalculation = () => {
       onFinishFailed={onFinishFailed}
       autoComplete="off">
       <div className="container-right-middle">
-        <Form.Item
+        <div className="form-text">
+          <p className="title">Thời gian đến tuổi nghỉ hưu còn</p>
+          <p className="value">
+            {` ${
+              finaceDatas !== "" && finaceDatas !== undefined
+                ? finaceDatas?.illustration?.investmentRate
+                : 0
+            } %`}
+          </p>
+        </div>
+        {/* </Form.Item> */}
+        {/* <Form.Item
           name="percantage"
           label="Lãi suất ngân hàng"
           rules={[
@@ -41,14 +109,6 @@ const ListCalculation = () => {
               required: false,
             },
           ]}>
-          {/* <InputNumber
-            style={{ width: 50 }}
-            defaultValue={0}
-            min={0}
-            formatter={(value) => `${value}%`}
-            parser={(value) => value.replace("%", "")}
-            onChange={onChange}
-          /> */}
           <div className="percentage-field">
             <Input
               className="percentage-input"
@@ -60,7 +120,7 @@ const ListCalculation = () => {
             />
             <span className="pIcon">%</span>
           </div>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           name="amount"
           label="Tổng tiền chi tiêu thiết yếu/tháng"
@@ -77,15 +137,6 @@ const ListCalculation = () => {
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             onChange={onChange}
           />
-          {/* <Input
-            placeholder="0"
-            type="text"
-            onChange={(e) =>
-              setAmount(e.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
-            }
-            value={Amount}
-            style={{ width: 120 }}
-          /> */}
         </Form.Item>
       </div>
       <div className="container-right-bottom">
@@ -102,8 +153,13 @@ const ListCalculation = () => {
       </div>
 
       <div className="container-right-submit">
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>Không còn tiềm năng</Checkbox>
+        <Form.Item name="remember">
+          <Checkbox
+            onChange={(e) => setIsPotential(e.target.checked)}
+            defaultChecked={true}
+            type="checkbox">
+            Không còn tiềm năng
+          </Checkbox>
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="btn-primary">

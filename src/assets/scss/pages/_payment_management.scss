@@ -24,39 +24,6 @@
     background-color: $white-color;
     border-radius: 20px;
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.05);
-    .paymentManagement-table {
-      .ant-table-tbody {
-        .ant-table-row-selected {
-          td {
-            // background: $green-table-bg !important;
-            // border-bottom: 1px solid $white-color !important;
-            // color: $white-color;
-            // &.green-color {
-            //   color: $black-color !important;
-            // }
-            // .btn-deleteIcon{
-            //   color: $white-color;
-            // }
-          }
-        }
-        .ant-table-row {
-          .btn-deleteIcon{
-            font-size: 2rem;
-            color: $gray-light-color;
-          }
-          &.active {
-            .ant-table-cell {
-              background: $green-color;
-              color: $white-color;
-            }
-            .btn-deleteIcon{
-              color: $white-color;
-            }
-          }
-          
-        }
-      }
-    }
   }
   &-header {
     height: 55px;

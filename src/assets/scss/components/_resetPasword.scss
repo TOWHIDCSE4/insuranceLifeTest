@@ -38,14 +38,14 @@
 }
 
 .forgot-password {
-  & .ant-modal-content {
+  .ant-modal-content {
     border-radius: 22px;
-    & .ant-modal-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 20px 35px !important;
-    }
+  }
+
+  .ant-modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   &__boxInput {
@@ -62,7 +62,7 @@
   }
 
   &__textError {
-    margin-top: 10px;
+    margin-top: 20px;
     text-align: center;
     color: $red-color;
     font-size: 14px;
@@ -94,15 +94,11 @@
   &__boxInput {
     padding: 0 30px;
     .ant-form-item-required:after {
-      content: '*';
+      content: "*";
       color: $red-color;
       font-weight: 600;
       font-size: 16px;
       margin-left: 2px;
-    }
-
-    .ant-form-item-explain-error {
-      margin-top: 5px;
     }
   }
 
@@ -118,18 +114,13 @@
 
   &__textError {
     @extend .forgot-password__textError;
-    margin: 20px 0;
-  }
-
-  &__textErrorOpt {
-    @extend .forgot-password__textError;
+    margin-bottom: 20px;
     margin-top: 0;
   }
 
   &__footer {
-    margin-top: 25px;
     border-top: 1px solid $grey-bg-color;
-    padding: 10px 14px;
+    padding: 14px 14px 0 14px;
   }
 }
 
@@ -137,19 +128,7 @@
   display: flex;
   justify-content: space-around;
 
-  &__btnCancel {
-    width: 127px;
-    height: 35px;
-    margin: 0 !important;
-
-    &:focus {
-      color: #ff5855 !important;
-      border: 1px solid #ff5855 !important;
-      background: #fff !important;
-    }
-  }
-
-  &__btnSend {
+  &__btn {
     width: 127px;
     height: 35px;
     margin: 0 !important;

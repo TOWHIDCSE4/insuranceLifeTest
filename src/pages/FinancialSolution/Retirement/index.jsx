@@ -1,16 +1,19 @@
 import { Col, Layout, List, Row, Typography } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PageBack from "../../../assets/images/financial/PageBack";
 import { sideBarMenuItems } from "../../../assets/fake-data/QuyDuPhongData";
 import SearchInputBox from "./SearchInputBox";
 import ListCalculation from "./ListCalculation";
 import ListDetails from "./ListDetails";
 const Retirement = () => {
+  const location = useLocation();
+  const { id } = location.state;
+  console.log(id);
   const [itemContent, setItemContent] = useState({});
   const [lists, setLists] = useState(sideBarMenuItems);
-  const [payload, setPayload] = useState("");
+  // const [payload, setPayload] = useState("");
 
   useEffect(() => {
     setItemContent(lists[0]);
@@ -52,7 +55,9 @@ const Retirement = () => {
                     <h1 className="container-search-box-header">
                       Người tham gia
                     </h1>
-                    <SearchInputBox setPayload={setPayload}></SearchInputBox>
+                    <SearchInputBox
+                    // setPayload={setPayload}
+                    ></SearchInputBox>
                   </div>
 
                   <List
@@ -83,7 +88,7 @@ const Retirement = () => {
           </Col>
 
           {/* manageContent start  */}
-          <Col lg={12} md={24} sm={24} xs={24}>
+          <Col lg={12} md={24} sm={24} xs={24} className="right-content">
             <Layout.Content className="manageContent">
               <div className="content-div-2">
                 <ListDetails />

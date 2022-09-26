@@ -5,10 +5,30 @@ import SearchInputBox from "./SearchInputBox";
 import ListCalculation from "./ListCalculation";
 import ListDetails from "./ListDetails";
 import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getFinanceDatas } from "../../../slices/financeSolutions";
 const ContingencyFund = () => {
   const location = useLocation();
+
+  // title
   const [title] = useState(location?.state?.title);
 
+  // id
+  const { id } = location.state;
+
+  // dispatch
+  const dispatch = useDispatch();
+
+  // dispatch getFinanceDatas
+  useEffect(() => {
+    dispatch(getFinanceDatas(id));
+  }, [getFinanceDatas]);
+
+  // useSelector
+  const finaceDatas = useSelector(
+    (state) => state.financeReducer.getFinanceDatas
+  );
+  console.log("finaceDatas ==>", finaceDatas);
   const [itemContent, setItemContent] = useState({});
   const [lists, setLists] = useState(sideBarMenuItems);
   const [payload, setPayload] = useState("");
@@ -73,7 +93,7 @@ const ContingencyFund = () => {
                   <div className="container-right-header">
                     <h1>Thông tin chi phí</h1>
                   </div>
-                  <ListCalculation />
+                  <ListCalculation finaceDatas={finaceDatas} />
                 </div>
 
                 {/* container-right end */}
@@ -84,7 +104,7 @@ const ContingencyFund = () => {
           </Col>
 
           {/* manageContent start  */}
-          <Col lg={12} md={24} sm={24} xs={24}>
+          <Col lg={12} md={24} sm={24} xs={24} className="right-content">
             <Layout.Content className="manageContent">
               <div className="content-div-2">
                 <ListDetails />

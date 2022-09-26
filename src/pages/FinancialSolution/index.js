@@ -1,85 +1,69 @@
-import React from "react";
-import { Card, Col, Image, Row, Anchor } from "antd";
+import React, { useEffect } from "react";
+import { Card, Col, Image, Row } from "antd";
 import { useTranslation } from "react-i18next";
-import Title from "../../components/Title";
-import IMG1 from "../../assets/images/financial/1.jpeg";
-import IMG2 from "../../assets/images/financial/2.jpeg";
-import IMG3 from "../../assets/images/financial/3.jpeg";
-import IMG4 from "../../assets/images/financial/4.jpeg";
-import IMG5 from "../../assets/images/financial/5.jpeg";
-import IMG6 from "../../assets/images/financial/6.jpeg";
+import brokenImage from "../../assets/images/financial/broken-image.png";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getFinanceFundDatas } from "../../slices/financeSolutions";
 
 const FinancialSolution = () => {
   const { t } = useTranslation();
-  const dataSource = [
-    {
-      key: 1,
-      title: "Quỹ Hưu trí",
-      dec: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      image: IMG1,
-      link: "/retirement",
-    },
-    {
-      key: 2,
-      title: "Quỹ khởi nghiệp",
-      dec: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      image: IMG2,
-      link: "/startup-fund",
-    },
-    {
-      key: 3,
-      title: "Quỹ thừa kế",
-      dec: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      image: IMG3,
-      link: "/inheritance-fund",
-    },
-    {
-      key: 4,
-      title: "Quỹ dự phòng",
-      dec: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      image: IMG4,
-      link: "/contingency-fund",
-    },
-    {
-      key: 5,
-      title: "Quỹ giáo dục",
-      dec: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      image: IMG5,
-      link: "/education-foundation",
-    },
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getFinanceFundDatas());
+  }, [getFinanceFundDatas]);
+  const finaceFundData = useSelector(
+    (state) => state.financeReducer.getFinanceFundDatas
+  );
 
-    {
-      key: 6,
-      title: "Quỹ sức khỏe",
-      dec: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      image: IMG6,
-      link: "/health-foundation",
-    },
-  ];
   return (
     <>
       <Row gutter={[20, 20]}>
-        <Col span={24} className='financial-title'>
+        <Col span={24} className="financial-title">
           <h3>{t("financial solution.title")}</h3>
         </Col>
-        {dataSource.map((item) => (
-          <Col span={24} lg={8} key={item.key} className="financial">
-            <div className='card-top'/>
-            <Link to={item.link}>
-              <Card className='financial__card'>
-                <Image src={item.image} className='financial__image' preview={false} />
-                <div className='financial__content'>
-                  <h3 className='financial__title'>{item.title}</h3>
-                  <p className='financial__dec'>{item.dec}</p>
-                </div>
-              </Card>
-            </Link>
-          </Col>
-        ))}
+        {finaceFundData !== undefined &&
+          finaceFundData?.map((item) => {
+            return (
+              <Col span={24} lg={8} key={item?.id} className="financial">
+                <div className="card-top" />
+                <Link
+                  to={`${
+                    (item?.name === "prevention" && "/contingency-fund") ||
+                    (item?.name === "inheritance" && "/inheritance-fund") ||
+                    (item?.name === "education" && "/education-foundation") ||
+                    (item?.name === "startup" && "/startup-fund") ||
+                    (item?.name === "pension" && "/retirement") ||
+                    item?.name
+                  }`}
+                  state={{ id: item?.id }}>
+                  <Card className="financial__card">
+                    <Image
+                      src={item?.image === null ? brokenImage : item?.image}
+                      className="financial__image"
+                      preview={false}
+                    />
+                    <div className="financial__content">
+                      <h3 className="financial__title">{`${
+                        (item?.name === "prevention" && "Quỹ dự phòng") ||
+                        (item?.name === "inheritance" && "Quỹ thừa kế") ||
+                        (item?.name === "education" && "Quỹ giáo dục") ||
+                        (item?.name === "startup" && "Quỹ khởi nghiệp") ||
+                        (item?.name === "pension" && "Quỹ Hưu trí") ||
+                        item?.name
+                      }`}</h3>
+                      <p className="financial__dec">
+                        {item?.description === null ? "N/A" : item?.description}
+                      </p>
+                    </div>
+                  </Card>
+                </Link>
+              </Col>
+            );
+          })}
       </Row>
     </>
-  )
+  );
 };
 
 export default FinancialSolution;

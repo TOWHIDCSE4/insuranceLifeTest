@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Form, Input, message, Modal, Typography } from "antd";
+import { Form, Input, Modal, Typography } from "antd";
 import { changePasswordApi } from "../../../services/auth";
 
 import FooterPassword from "./FooterPassword";
@@ -17,7 +17,6 @@ const UpdatePassword = ({
   const [codeInput, setCodeInput] = useState("");
   const [messageError, setMessageError] = useState("");
   const [openMessageError, setOpenMessageError] = useState(false);
-  const [openOptError, setOpenOptError] = useState(false);
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
@@ -33,10 +32,9 @@ const UpdatePassword = ({
         form.resetFields();
         handleCancelForgot();
         handleLoginId("");
-        message.success("Mật khẩu đã được cập nhật thành công.");
       } else {
         setOpenMessageError(true);
-        setMessageError("Các mật khẩu đã nhập không khớp. Vui lòng thử lại.");
+        setMessageError("Mật khẩu mới không trùng khớp");
       }
     } catch (e) {
       setOpenMessageError(true);
@@ -46,7 +44,7 @@ const UpdatePassword = ({
 
   const onFinishFailed = () => {
     if (codeInput.length !== 4 || codeInput.length < 0) {
-      setOpenOptError(true);
+      setMessageError("Vui Lòng Nhập mã code");
     } else {
       setMessageError("Vui Lòng nhập Mật khẩu mới và nhập lại mật khẩu mới");
     }
@@ -57,9 +55,9 @@ const UpdatePassword = ({
     <Modal
       className="update-password"
       open={open}
+      onCancel={handleCancel}
       centered
       closable={false}
-      maskClosable={false}
       footer={null}
       width={335}
     >
@@ -74,11 +72,6 @@ const UpdatePassword = ({
           onChange={(value) => setCodeInput(value)}
           type="number"
         />
-        {openOptError && (
-          <Typography className="update-password__textErrorOpt">
-            Vui Lòng Nhập mã code
-          </Typography>
-        )}
         <Form
           form={form}
           name="update-password"
@@ -92,7 +85,7 @@ const UpdatePassword = ({
             name="password"
             labelCol={{ span: 24 }}
             className="update-password__boxInput"
-            rules={[{ required: true, message: "Vui lòng nhập Mật khẩu mới" }]}
+            rules={[{ required: true, message: "" }]}
           >
             <Input.Password
               className="update-password__password"
@@ -106,9 +99,7 @@ const UpdatePassword = ({
             labelCol={{ span: 24 }}
             name="confirmPassword"
             className="update-password__boxInput"
-            rules={[
-              { required: true, message: "Vui lòng nhập lại mật khẩu mới" },
-            ]}
+            rules={[{ required: true, message: "" }]}
           >
             <Input.Password
               className="update-password__password"

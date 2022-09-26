@@ -27,15 +27,6 @@
       width: 100%;
       &__username {
         margin-bottom: 16px;
-        & .ant-form-item-explain-error {
-          margin-top: 5px;
-        }
-      }
-
-      &__password {
-        & .ant-form-item-explain-error {
-          margin-top: 5px;
-        }
       }
       &__remember {
         margin-top: 24px;
@@ -64,8 +55,7 @@
   }
 
   &__textError {
-    margin: 16px auto 0;
-    padding: 0 40px;
+    margin-top: 16px;
     font-size: 14px;
     color: $red-color;
     text-align: center;
@@ -96,13 +86,18 @@
     color: $green-color;
     font-weight: 600;
     float: right;
-    border: none;
-    &:hover,
-    &:active,
-    &:focus {
-      border: none;
-      background-color: unset !important;
+    &:hover {
+      background-color: unset;
       color: $green-color;
+    }
+    &:active {
+      background-color: unset;
+      color: $green-table-bg;
+    }
+    &:focus {
+      background-color: unset;
+      border: 0;
+      color: $green-table-bg;
     }
   }
 
@@ -136,6 +131,10 @@
       display: inline-block;
       width: 100%;
       height: 100%;
+      // display: flex;
+      // justify-content: center;
+      // flex-direction: row;
+      // overflow: hidden;
     }
 
     &__context {
