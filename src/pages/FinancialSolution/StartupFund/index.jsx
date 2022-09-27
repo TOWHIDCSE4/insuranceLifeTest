@@ -84,7 +84,7 @@ const StartupFund = () => {
           </Col>
 
           {/* manageContent start  */}
-          <Col lg={12} md={24} sm={24} xs={24}>
+          <Col lg={12} md={24} sm={24} xs={24} className="right-content">
             <Layout.Content className="manageContent">
               <div className="content-div-2">
                 <ListDetails />

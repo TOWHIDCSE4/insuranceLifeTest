@@ -263,15 +263,30 @@ input[type="number"] {
             }
           }
 
-          .form-input-text {
-            height: 20px;
-            font-family: "Quicksand";
-            font-style: normal;
-            font-weight: 700;
-            font-size: 16px;
-            line-height: 20px;
-            text-align: right;
-            color: #666666;
+          .form-text {
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .title {
+              font-family: "Quicksand";
+              font-style: normal;
+              font-weight: 600;
+              font-size: 14px;
+              line-height: 16px;
+              color: #333333;
+            }
+            .value {
+              height: 20px;
+              font-family: "Quicksand";
+              font-style: normal;
+              font-weight: 700;
+              font-size: 16px;
+              line-height: 20px;
+              text-align: right;
+              color: #666666;
+            }
           }
           .ant-select {
             font-size: 12px;
@@ -550,6 +565,12 @@ input[type="number"] {
             }
           }
         }
+      }
+    }
+
+    @media only screen and (max-width: 767px) {
+      .right-content {
+        display: none !important;
       }
     }
   }

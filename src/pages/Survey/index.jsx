@@ -60,7 +60,9 @@ const Survey = () => {
                 <div className="content-div-1">
                   <div className="container-left">
                     <div className="container-search-box">
-                      <h1 className="container-search-box-header">Người tham gia</h1>
+                      <h1 className="container-search-box-header">
+                        Người tham gia
+                      </h1>
                       <SearchInputBox setPayload={setPayload}></SearchInputBox>
                     </div>
 
@@ -69,10 +71,18 @@ const Survey = () => {
                         dataSource={data}
                         renderItem={(customer, index) => (
                           <List.Item
-                            onClick={() => handleSelectCustomer(customer?.customerId)}
-                            className={`${customer?.customerId === selectedCustomer?.customerId ? "active" : ""}`}
-                          >
-                            <Typography.Text ellipsis>{customer?.fullname}</Typography.Text>
+                            onClick={() =>
+                              handleSelectCustomer(customer?.customerId)
+                            }
+                            className={`${
+                              customer?.customerId ===
+                              selectedCustomer?.customerId
+                                ? "active"
+                                : ""
+                            }`}>
+                            <Typography.Text ellipsis>
+                              {customer?.fullname}
+                            </Typography.Text>
                           </List.Item>
                         )}
                       />
@@ -82,18 +92,30 @@ const Survey = () => {
                   <div className="container-right">
                     <div className="container-right-header">
                       <div>
-                        <Button type="primary" className="btn-primary" onClick={historyHandler}>
+                        <Button
+                          type="primary"
+                          className="btn-primary"
+                          onClick={historyHandler}>
                           {t("common.history")}
                         </Button>
                       </div>
                       <div className="right">
-                        <Button type="primary" className="btn-primary" onClick={solutionHandler}>
+                        <Button
+                          type="primary"
+                          className="btn-primary"
+                          onClick={solutionHandler}>
                           {t("common.solution")}
                         </Button>
-                        <Button type="primary" className="btn-primary" onClick={counselHandler}>
+                        <Button
+                          type="primary"
+                          className="btn-primary"
+                          onClick={counselHandler}>
                           {t("common.consultant")}
                         </Button>
-                        <Button type="primary" className="btn-primary" onClick={appointmentHandler}>
+                        <Button
+                          type="primary"
+                          className="btn-primary"
+                          onClick={appointmentHandler}>
                           {t("common.booking")}
                         </Button>
                       </div>
@@ -104,7 +126,7 @@ const Survey = () => {
               </Layout.Content>
             </Col>
 
-            <Col lg={9} md={24} sm={24} xs={24}>
+            <Col lg={9} md={24} sm={24} xs={24} className="right-content">
               <Layout.Content className="manageContent">
                 <div className="content-div-2">
                   <ListDetails />
@@ -114,7 +136,10 @@ const Survey = () => {
           </Row>
         </div>
       </div>
-      <HistoryModal isModalOpen={isHistoryModalOpen} toggleModal={toggleHistoryModal} />
+      <HistoryModal
+        isModalOpen={isHistoryModalOpen}
+        toggleModal={toggleHistoryModal}
+      />
     </Fragment>
   );
 };

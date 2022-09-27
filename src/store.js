@@ -13,6 +13,7 @@ import contractManagement from "./slices/contractManagement";
 import paymentManagement from "./slices/paymentManagement";
 import surveyReducer from "./slices/surveys";
 import customerReducer from "./slices/customers";
+import financeSlice from "./slices/financeSolutions";
 
 const persistConfig = {
   key: "root",
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   paymentManagementReducer: paymentManagement,
   surveys: surveyReducer,
   customers: customerReducer,
+  financeReducer: financeSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

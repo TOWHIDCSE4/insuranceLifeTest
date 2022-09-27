@@ -15,7 +15,7 @@ const CustomerServeyTable = () => {
   const [financialInstrument, setFinancialInstrument] = useState("");
   const [savingMoney, setSavingMoney] = useState("");
   const [propertyIncome, setPropertyIncome] = useState("");
-  const [isPotential, setIsPotential] = useState(false);
+  const [isPotential, setIsPotential] = useState(true);
   const { surveys, customers } = useSelector((state) => state);
   const { selectedCustomer } = customers;
   const { survey } = surveys;
