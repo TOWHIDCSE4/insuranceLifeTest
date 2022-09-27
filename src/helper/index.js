@@ -1,16 +1,10 @@
 import moment from 'moment'
-import {FORMAT_DATE, CUSTOMER_CARE_INFO} from '../ultis/constant'
+import {CUSTOMER_CARE_INFO} from '../ultis/constant'
 import _ from 'lodash'
 
 export const formatDataNumber = (number) => {
   if (number) {
-    if (Number.isInteger(number)) {
-      return new Intl.NumberFormat('ja-JP').format(number)
-    } else {
-      return number.toFixed(2).replace(/./g, function (c, i, a) {
-        return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-      });
-    }
+    return new Intl.NumberFormat().format(number)
   } else return 0
 }
 
@@ -20,8 +14,8 @@ export const pad = (num, size) => {
   return num
 }
 
-export const getTimeByTZ = (date, format = FORMAT_DATE) => {
-  return moment(date).utc().format(format)
+export const getTimeByTZ = (date, format = moment.localeData().longDateFormat('L')) => {
+  return moment(date).local().format(format)
 }
 
 export const getCustomerCareLabel = (customerValue) => {
@@ -31,3 +25,13 @@ export const getCustomerCareLabel = (customerValue) => {
 
   return info.label
 }
+
+export const calculateAge = (dob) => {
+  let birthYear = moment(dob).utc().format("YYYY")
+  let year = moment().format("YYYY")
+
+  return year - birthYear;
+}
+
+export const capitalizeFirstLetter = ([ first, ...rest ], locale = navigator.language) =>
+first === undefined ? '' : first.toLocaleUpperCase(locale) + rest.join('')

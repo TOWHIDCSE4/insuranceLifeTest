@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Input, Modal, Typography } from "antd";
+import { Input, message, Modal, Typography } from "antd";
 
 import { resetPasswordApi } from "../../../services/auth";
 import FooterPassword from "./FooterPassword";
@@ -22,28 +22,38 @@ const ForgotPassword = ({
         await resetPasswordApi({ loginId: id });
         setOpenMessageError(false);
         handleOpenUpdate();
+        message.success(
+          "Hệ thống đã gửi mã xác nhận đến email của bạn. Vui lòng kiểm tra email và nhập đúng mã xác nhận."
+        );
       } else {
         setOpenMessageError(true);
         setMessageError("Vui lòng nhập ID của bạn");
       }
     } catch (e) {
       setOpenMessageError(true);
-      setMessageError("ID của bạn không được tìm thấy");
+      setMessageError(
+        "ID bạn đã nhập không khớp với bất kỳ tài khoản nào. Vui lòng thử lại."
+      );
     }
+  };
+
+  const onCancel = () => {
+    handleCancel();
+    handleLoginId("");
   };
 
   return (
     <Modal
       className="forgot-password"
       open={open}
-      onCancel={handleCancel}
       centered
       closable={false}
+      maskClosable={false}
       footer={
         <FooterPassword
           textCancel="Huỷ"
           textSubmit="Gửi email"
-          handleCancel={handleCancel}
+          handleCancel={onCancel}
           handleSubmit={handleSend}
         />
       }

@@ -7,10 +7,8 @@
       min-height: 50vh;
     }
   }
-  &-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .ant-pagination {
+    @extend %flex-centered;
   }
   .gutter-row {
     .ant-typography {
@@ -35,28 +33,22 @@
       a {
         width: 100%;
         height: 100%;
-        /* display: flex;
-        justify-content: center;
-        align-items: center; */
       }
       &-row {
         width: 100%;
         height: 100%;
         margin: unset !important;
 
-        &.content-row_wrap {
-          /* .ant-col {
-            height: 100%;
-          } */
+        .col-wrap{
+          min-height: 100px;
         }
       }
     }
     .ant-image {
+      @extend %flex-centered;
       width: 100%;
       height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+
       &-img {
         object-fit: cover;
         border-radius: 10px;

@@ -21,6 +21,7 @@ export const VALIDATE_MESSAGES = {
     range: '${label} must be between ${min} and ${max}',
   },
 };
+export const GIFT = "GIFT"
 
 export const CUSTOMER_CARE_INFO = [
   { label: 'Thu nhập', value: "INCOME" },

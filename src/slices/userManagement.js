@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { create, getUser, getAll, update, getSearch, remove, removeUsers, uploadFile, resetUser } from '../services/userManagement';
+import { create, getUser, getAll, updateRole, getSearch, remove, removeUsers, uploadFile, resetUser } from '../services/userManagement';
 
 const initialState = {
   data: [],
   totalItem: null,
+  messageError: null,
+  refreshList: false,
 };
 
 export const searchUser = createAsyncThunk('userManagement/getSearch', async (payload) => {
@@ -13,9 +15,16 @@ export const searchUser = createAsyncThunk('userManagement/getSearch', async (pa
 
 export const createUser = createAsyncThunk(
   'userManagement/createUser',
-  async (payload) => {
-    const res = await create(payload);
-    return res.data;
+  async (payload,{rejectWithValue}) => {
+    try {
+      const res = await create(payload);
+      return {
+        data: res.data,
+        message: "Tạo user thành công"
+      };
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
 );
 export const getUserProfile = createAsyncThunk('userManagement/getUser', async () => {
@@ -24,13 +33,13 @@ export const getUserProfile = createAsyncThunk('userManagement/getUser', async (
 });
 export const updateUser = createAsyncThunk(
   'userManagement/updateUser',
-  async (data) => {
-    const res = await update(data);
+  async ({id, data}) => {
+    const res = await updateRole({id, data});
     return res.data;
   }
 );
 export const resetUserId = createAsyncThunk(
-  'userManagement/updateUser',
+  'userManagement/resetUser',
   async (data) => {
     const res = await resetUser(data);
     return res.data;
@@ -39,7 +48,6 @@ export const resetUserId = createAsyncThunk(
 export const uploadFiles = createAsyncThunk(
   'userManagement/uploadFile',
   async (data) => {
-    console.log(data);
     const res = await uploadFile(data);
     return res.data;
   }
@@ -62,7 +70,6 @@ export const removeUserIds = createAsyncThunk(
   'userManagement/removeUser',
   async (data) => {
     const res = await removeUsers(data);
-    console.log(res.data);
     return res.data;
   }
 );
@@ -72,31 +79,32 @@ const useManagement = createSlice({
   initialState,
   extraReducers: {
     [searchUser.fulfilled]: (state, action) => {
-      state.data = [...action.payload.data];
+      state.data = [...action.payload?.data];
       state.totalItem = action.payload.total;
+      state.refreshList=false
     },
-    [createUser.fulfilled]: (state, action) => {
-      state.data.push(action.payload);
+    [createUser.fulfilled]: (state) => {
+      state.refreshList=true
     },
+    // [createUser.rejected]: (state, action) => {
+    //   state.messageError = action.payload;
+    // },
     [retrieveData.fulfilled]: (state, action) => {
-      state.data = [...action.payload.data];
       state.totalItem = action.payload.total;
+      state.data = action.payload.data;
+      state.refreshList=false
+    },
+    [resetUserId.fulfilled]: (state, action) => {
+      state.refreshList=true
     },
     [updateUser.fulfilled]: (state, action) => {
-      const index = state.data.findIndex((data) => data.id === action.payload.id);
-      state.data[index] = {
-        ...state.data[index],
-        ...action.payload,
-      };
+      state.refreshList=true
     },
     [removeUser.fulfilled]: (state, action) => {
-      let index = state.data.findIndex(({ id }) => id == action.payload.id);
-      state.data.splice(index, 1);
+      state.refreshList=true
     },
     [removeUserIds.fulfilled]: (state, action) => {
-      // state.data = state.data.filter(
-      //   ({ id }) => action.payload.id.includes(id)
-      // );
+      state.refreshList=true
     },
   },
 });

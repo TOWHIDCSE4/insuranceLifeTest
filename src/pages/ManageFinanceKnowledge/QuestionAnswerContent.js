@@ -42,7 +42,7 @@ const QuestionAnswerContent = (props) => {
             <Title title='Nội dung' />
             <div className='manageContent-header_icon'>
               <img src={EditIcon} />
-              <img src={DeleteIcon} onClick={() => onDelete(content?.id)} />
+              <img src={DeleteIcon} onClick={() => onDelete(content)} />
             </div>
           </div>
         }

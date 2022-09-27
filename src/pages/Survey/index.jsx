@@ -2,69 +2,40 @@ import { Button, Col, Layout, List, Row, Typography } from "antd";
 import React, { Fragment, useEffect, useState } from "react";
 import SearchInputBox from "./SearchInputBox";
 import ListDetails from "./ListDetails";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { HistoryModal } from "./Modals/HistoryModal";
 import TabMenu from "./Tabs/TabMenu";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getCompanyHisDatas,
-  getCustomerHisDatas,
-  getSurveyDatas,
-} from "../../slices/survey";
+import { getCustomerHistoryById } from "../../slices/surveys";
+import { getCustomerList, setSelectedCustomer } from "../../slices/customers";
 
-import { getCustomers } from "../../services/customers";
 const Survey = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-  const [itemContent, setItemContent] = useState({});
-  const [customerDatas, setCustomerDatas] = useState("");
-  const [customersData, setCustomersData] = useState([]);
+  const [payload, setPayload] = useState("");
+  const { customers } = useSelector((state) => state);
+  const { data, selectedCustomer } = customers;
 
-  const { companyId, customerId } = customerDatas;
-  const allSurveyData = useSelector((state) => state.surveyReducer);
-  console.log("customerDatas ==>", companyId, customerId);
-  console.log("allSurveyData ==>", allSurveyData);
-
-  // customerId
   useEffect(() => {
-    if (customerId !== undefined) {
-      dispatch(getCustomerHisDatas(customerId));
-    }
-  }, [customerDatas]);
+    dispatch(getCustomerList());
+  }, [dispatch]);
 
-  // companyId
   useEffect(() => {
-    if (companyId !== undefined) {
-      dispatch(getCompanyHisDatas(companyId));
-    }
-  }, [customerDatas]);
+    dispatch(setSelectedCustomer(data[0]?.customerId));
+  }, [data, dispatch]);
 
-  const getDataCustomer = async (payload) => {
-    const { data } = await getCustomers(payload);
-    if (data.data.length > 0) {
-      setCustomersData(data.data);
-      console.log(data.data);
-      data?.data?.map((data) => {
-        setCustomerDatas(data);
-      });
-    }
+  const handleSelectCustomer = (id) => {
+    dispatch(setSelectedCustomer(id));
   };
-
-  useEffect(() => {
-    getDataCustomer();
-  }, []);
-
-  useEffect(() => {
-    setItemContent(customersData[0]);
-  }, []);
 
   const toggleHistoryModal = () => {
     setIsHistoryModalOpen(!isHistoryModalOpen);
   };
   const historyHandler = () => {
+    dispatch(getCustomerHistoryById(selectedCustomer?.customerId));
     toggleHistoryModal();
   };
   const solutionHandler = () => {
@@ -82,38 +53,42 @@ const Survey = () => {
       <div className="survey">
         <h3 className="title">{t("survey.title")}</h3>
 
-        {/* survey-container start */}
         <div className="survey-container">
           <Row gutter={[16, 10]} justify="start" align="stretch">
             <Col lg={15} md={24} sm={24} xs={24}>
               <Layout.Content>
-                {/* content-div-1 start  */}
                 <div className="content-div-1">
                   <div className="container-left">
                     <div className="container-search-box">
                       <h1 className="container-search-box-header">
                         Người tham gia
                       </h1>
-                      <SearchInputBox
-                      // setPayload={setPayload}
-                      ></SearchInputBox>
+                      <SearchInputBox setPayload={setPayload}></SearchInputBox>
                     </div>
 
-                    <List
-                      dataSource={customersData}
-                      renderItem={(item, index) => (
-                        <List.Item
-                          onClick={() => setItemContent(item)}
-                          className={`${item === itemContent ? "active" : ""}`}>
-                          <Typography.Text ellipsis>
-                            {item.fullname}
-                          </Typography.Text>
-                        </List.Item>
-                      )}
-                    />
+                    {data?.length > 0 && (
+                      <List
+                        dataSource={data}
+                        renderItem={(customer, index) => (
+                          <List.Item
+                            onClick={() =>
+                              handleSelectCustomer(customer?.customerId)
+                            }
+                            className={`${
+                              customer?.customerId ===
+                              selectedCustomer?.customerId
+                                ? "active"
+                                : ""
+                            }`}>
+                            <Typography.Text ellipsis>
+                              {customer?.fullname}
+                            </Typography.Text>
+                          </List.Item>
+                        )}
+                      />
+                    )}
                   </div>
 
-                  {/* container-right start */}
                   <div className="container-right">
                     <div className="container-right-header">
                       <div>
@@ -147,15 +122,10 @@ const Survey = () => {
                     </div>
                     <TabMenu />
                   </div>
-
-                  {/* container-right end */}
                 </div>
-
-                {/* content-div-1 end  */}
               </Layout.Content>
             </Col>
 
-            {/* manageContent start  */}
             <Col lg={9} md={24} sm={24} xs={24} className="right-content">
               <Layout.Content className="manageContent">
                 <div className="content-div-2">
@@ -163,7 +133,6 @@ const Survey = () => {
                 </div>
               </Layout.Content>
             </Col>
-            {/* manageContent end  */}
           </Row>
         </div>
       </div>

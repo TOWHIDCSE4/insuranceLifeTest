@@ -17,10 +17,6 @@ export const ENDPOINT = {
     financeFunds: "finance-solutions/funds",
     financeSolutions: "finance-solutions",
   },
-  surveys: {
-    surveys: "surveys",
-    surveysCusHis: "surveys/customer-history",
-    surveysComHis: "surveys/company-history",
-    surveysBulkCreate: "surveys/bulk-create",
-  },
+  userSearch: "users/search",
+  surveys: "surveys",
 };

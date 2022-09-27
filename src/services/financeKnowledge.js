@@ -9,3 +9,6 @@ export const getMostView = () =>
   );
 export const view = (id) =>
   sendGet(`${ENDPOINT.financeKnowledge.getArticles}/view/${id}`);
+
+export const getImage = (imageField) =>
+  sendGet(`${ENDPOINT.financeKnowledge.getArticles}/image/${imageField}`);

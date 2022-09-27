@@ -6,8 +6,9 @@ import { createPayment } from '../../slices/paymentManagement';
 import { LOADING_STATUS } from '../../ultis/constant';
 
 const CreatePayment = (props) => {
-  const { users, isModalOpen, setIsModalOpen } = props;
+  const { isModalOpen, setIsModalOpen } = props;
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
   const loading = useSelector((state) => state.loading.loading);
 
@@ -21,6 +22,7 @@ const CreatePayment = (props) => {
     dispatch(createPayment(newPayment));
     if (loading === LOADING_STATUS.succeeded) {
       setIsModalOpen(false);
+      form.resetFields()
     }
   };
 
@@ -33,9 +35,9 @@ const CreatePayment = (props) => {
         footer={false}
         keyboard={false}
         centered
-        onCancel={() => setIsModalOpen(false)}
+        onCancel={() =>{ setIsModalOpen(false),form.resetFields()}}
       >
-        <Form name='nest-messages' onFinish={handleAddNew}>
+        <Form name='nest-messages' onFinish={handleAddNew} form={form}>
           <Form.Item
             name='loginId'
             label='ID Login'
@@ -53,7 +55,6 @@ const CreatePayment = (props) => {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập họ tên',
               },
             ]}
           >

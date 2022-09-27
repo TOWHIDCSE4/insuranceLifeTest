@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import { Table } from 'antd';
-import {useSelector} from 'react-redux';
-import {LOADING_STATUS} from '../../../ultis/constant';
+import { useSelector } from 'react-redux';
+import { LOADING_STATUS } from '../../../ultis/constant';
 
 export default function TableCommon(props) {
   const loading = useSelector((state) => state.loading);
@@ -11,12 +11,9 @@ export default function TableCommon(props) {
     pagination = false,
     isSelection = false,
     bordered = false,
-    ratioHeight = 0.5,
-    heightMargin = 340,
     setSelectedRowKeys,
+    isScroll,
   } = props;
-  const ref = useRef(null)
-  const [isScroll, setIsScroll] = useState(false)
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     setSelectedRowKeys(selectedRows);
@@ -26,30 +23,26 @@ export default function TableCommon(props) {
     onChange: onSelectChange,
   };
 
-  useEffect(() => {
-    if (ref.current.clientHeight > window.innerHeight*ratioHeight) {
-      setIsScroll(true)
-    }
-  })
-
-  return <Table
-    {...props}
-    ref={ref}
-    loading={loading.loading === LOADING_STATUS.pending ? true : false}
-    rowSelection={isSelection ? rowSelection : undefined}
-    dataSource={dataSource}
-    columns={columnTable}
-    pagination={pagination}
-    bordered={bordered}
-    className='table-common'
-    rowKey="id"
-    scroll={isScroll ?
-      {
-        y: `calc(100vh - ${heightMargin}px)`,
-        scrollToFirstRowOnChange: false
-      }
-      : 
-      {}}>
-    {props.children}
-  </Table>
+  return (
+    <Table
+      {...props}
+      loading={loading.loading === LOADING_STATUS.pending ? true : false}
+      rowSelection={isSelection ? rowSelection : undefined}
+      dataSource={dataSource}
+      columns={columnTable}
+      pagination={pagination}
+      bordered={bordered}
+      className='table-common'
+      rowKey='id'
+      // scroll={isScroll ?
+      //   {
+      //     y: `calc(100vh - ${heightMargin}px)`,
+      //     scrollToFirstRowOnChange: false
+      //   }
+      //   :
+      //   {}}
+    >
+      {props.children}
+    </Table>
+  );
 }

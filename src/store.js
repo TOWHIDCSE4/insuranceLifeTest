@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/es/storage/session";
+
 import loading from "./slices/loading";
 import authReducer from "./slices/auth";
 import events from "./slices/events";
@@ -10,7 +11,8 @@ import managementContentReducer from "./slices/managementContent";
 import userManagement from "./slices/userManagement";
 import contractManagement from "./slices/contractManagement";
 import paymentManagement from "./slices/paymentManagement";
-import surveyReducer from "./slices/survey";
+import surveyReducer from "./slices/surveys";
+import customerReducer from "./slices/customers";
 import financeSlice from "./slices/financeSolutions";
 
 const persistConfig = {
@@ -29,7 +31,8 @@ const rootReducer = combineReducers({
   userManagement: userManagement,
   contractManagement: contractManagement,
   paymentManagementReducer: paymentManagement,
-  surveyReducer: surveyReducer,
+  surveys: surveyReducer,
+  customers: customerReducer,
   financeReducer: financeSlice,
 });
 

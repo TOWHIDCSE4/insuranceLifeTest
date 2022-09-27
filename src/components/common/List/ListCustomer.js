@@ -1,7 +1,6 @@
 import React from 'react';
 import {useTranslation} from "react-i18next";
-import {FORMAT_DATE} from '../../../ultis/constant'
-import moment from 'moment'
+import {calculateAge, getTimeByTZ, formatDataNumber} from '../../../helper'
 
 export default function ListCustomer(props) {
   const {t} = useTranslation();
@@ -22,13 +21,13 @@ export default function ListCustomer(props) {
         </p>
         <div className="list-customer__content-gender">
           <p className="list-customer__content-gender--left"><span className="before">{t('common.gender')}</span>Nam {data?.gender}</p>
-          <p className="list-customer__content-gender--right"><span className="before">{t('common.old')}</span> {data?.age}</p>
+          <p className="list-customer__content-gender--right"><span className="before">{t('common.old')}</span> {calculateAge(data?.dob)}</p>
         </div>
         <p className={`${selectId === data.customerId ? 'color-green' : ''} list-customer__content-contract`}>
-          <span className="before">{t('common.contract')}</span>{data?.income}
+          <span className="before">{t('common.contract')}</span>{formatDataNumber(data?.income)}
         </p>
         <p className="list-customer__content-date">
-          <span className="before">{t('common.sign date')}</span>{moment(data?.updatedAt).format(FORMAT_DATE)}
+          <span className="before">{t('common.sign date')}</span>{getTimeByTZ(data?.createdAt)}
         </p>
       </div>
     </div>

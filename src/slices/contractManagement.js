@@ -1,17 +1,57 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {createContracts, getAll} from '../services/contractManagement';
-
+import {
+  createContracts,
+  getAll,
+  update,
+  getCustom,
+  getById,
+} from '../services/contractManagement';
 
 const initialState = {
   data: [],
-  totalItem: null,
+  totalItem: 0,
+  custom: [],
+  contractById: null,
+  refreshData: false,
 };
 
 export const createContract = createAsyncThunk(
   'contractManagement/createContract',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await createContracts(payload);
+      return { data: res.data, message: res.statusText };
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getCustoms = createAsyncThunk(
+  'contractManagement/getCustoms',
   async (payload) => {
-    const res = await createContracts(payload);
+    const res = await getCustom(payload);
     return res.data;
+  }
+);
+
+// export const getByIds = createAsyncThunk(
+//   'contractManagement/getContractId',
+//   async (payload) => {
+//     const res = await getById(payload);
+//     return res.data;
+//   }
+// );
+
+export const updateContract = createAsyncThunk(
+  'contractManagement/createContract',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const res = await update({ id, data });
+      return { data: res.data, message: res.statusText };
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
 );
 
@@ -19,7 +59,6 @@ export const retrieveData = createAsyncThunk(
   'contractManagement/retrieveData',
   async (payload) => {
     const res = await getAll(payload);
-    console.log(res.data.contracts);
     return res.data;
   }
 );
@@ -27,19 +66,30 @@ export const retrieveData = createAsyncThunk(
 const contractManagement = createSlice({
   name: 'contractManagement',
   initialState,
+  reducers: {
+    setRefresh: (state) => {
+      state.refreshData = false;
+    },
+  },
   extraReducers: {
-    // [searchUser.fulfilled]: (state, action) => {
-    //   state.data = [...action.payload.data];
-    //   state.totalItem = action.payload.total;
-    // },
-    [createContract.fulfilled]: (state, action) => {
-      state.data.push(action.payload);
+    [createContract.fulfilled]: (state) => {
+      state.refreshData = true;
     },
     [retrieveData.fulfilled]: (state, action) => {
       state.data = [...action.payload.contracts];
+      state.totalItem = action.payload.contractsCount;
+      state.refreshData=false
+    },
+    [getCustoms.fulfilled]: (state, action) => {
+      state.custom = [...action.payload.data];
+    },
+    [updateContract.fulfilled]: (state) => {
+      // state.refreshData = true
     },
   },
 });
+
+export const { setRefresh } = contractManagement.actions;
 
 const { reducer } = contractManagement;
 

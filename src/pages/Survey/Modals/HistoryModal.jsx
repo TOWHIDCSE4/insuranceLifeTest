@@ -1,70 +1,56 @@
-import { Modal, Empty } from "antd";
-import React, { useState, useMemo } from "react";
+import { Modal, Table } from "antd";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import TableCommon from "../../../components/common/TableNormal";
-
-const dataSource = [
-  {
-    key: 0,
-    date: "12/12/2021",
-    info: "Tên gợi nhớ 01",
-  },
-  {
-    key: 1,
-    date: "12/07/2022",
-    info: "Tên gợi nhớ 02",
-  },
-  {
-    key: 3,
-    date: "12/08/2022",
-    info: "Tên gợi nhớ 03",
-  },
-  {
-    key: 4,
-    date: "12/08/2022",
-    info: "Tên gợi nhớ 03",
-  },
-  {
-    key: 5,
-    date: "12/08/2022",
-    info: "Tên gợi nhớ 03",
-  },
-  {
-    key: 6,
-    date: "12/08/2022",
-    info: "Tên gợi nhớ 03",
-  },
-  {
-    key: 7,
-    date: "12/08/2022",
-    info: "Tên gợi nhớ 03",
-  },
-];
-
+import moment from "moment";
+import { getSurveyDetails } from "../../../slices/surveys";
 export const HistoryModal = ({ isModalOpen, toggleModal }) => {
   const { t } = useTranslation();
-  const [dataTable, setDataTable] = useState(dataSource);
+  const dispatch = useDispatch();
+  const [dataTable, setDataTable] = useState([]);
+  const { surveys } = useSelector((state) => state);
+
+  useEffect(() => {
+    const historyData = surveys?.customerHistories?.map((history, i) => {
+      return {
+        key: i + 1,
+        apptId: history?.apptId,
+        customerId: history?.customerId,
+        surveyId: history?.surveyId,
+        date: moment(history?.createdAt).format("DD/MM/YYYY"),
+        info: history?.hintName,
+      };
+    });
+    setDataTable(historyData);
+  }, [surveys.customerHistories]);
+
+  const getSurvey = (surveyId) => {
+    dispatch(getSurveyDetails(surveyId));
+    console.log("survey id", surveyId);
+  };
+
   const columns = [
     {
       title: t("Date"),
       dataIndex: "date",
       key: "date",
+      render: (_, record) => (
+        <span onClick={() => getSurvey(record?.surveyId)} style={{ cursor: "pointer" }}>
+          {record?.date}
+        </span>
+      ),
     },
     {
       title: t("Name"),
       dataIndex: "info",
       key: "info",
+      render: (_, record) => (
+        <span onClick={() => getSurvey(record?.surveyId)} style={{ cursor: "pointer" }}>
+          {record?.info}
+        </span>
+      ),
     },
   ];
-  const table = useMemo(() => {
-    if (!!dataTable && dataTable.length > 0) {
-      return (
-        <TableCommon dataSource={dataTable} columnTable={columns}></TableCommon>
-      );
-    } else {
-      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
-    }
-  }, [dataTable]);
 
   const handleOk = () => {
     toggleModal();
@@ -77,8 +63,9 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
       onOk={handleOk}
       onCancel={toggleModal}
       className="history-modal modal-custom"
-      width={313}>
-      {table}
+      width={313}
+    >
+      {dataTable?.length && <Table dataSource={dataTable} columns={columns} pagination={false} />}
     </Modal>
   );
 };

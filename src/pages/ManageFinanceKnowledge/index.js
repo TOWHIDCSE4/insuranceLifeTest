@@ -1,9 +1,20 @@
-import { Button, Col, Layout, List, Row, Segmented, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Layout,
+  List,
+  Row,
+  Segmented,
+  Spin,
+  Typography,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { options } from '../../assets/fake-data/data';
 import IconPlus from '../../assets/images/icons/plus.svg';
+import Pagination from '../../components/common/Pagination';
+import ModalConfirm from '../../components/ModalConfirm';
 import Title from '../../components/Title';
 import {
   createContent,
@@ -11,6 +22,7 @@ import {
   retrieveData,
   updateContent,
 } from '../../slices/managementContent';
+import { DEFAULT_SIZE, LOADING_STATUS } from '../../ultis/constant';
 import FinanceKnowledgeContent from './FinanceKnowledgeContent';
 import QuestionAnswerContent from './QuestionAnswerContent';
 
@@ -18,14 +30,21 @@ const ManageFinanceKnowledge = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const contents = useSelector((state) => state.managementContentReducer);
+  const loading = useSelector((state) => state.loading.loading);
 
-  const [itemContent, setItemContent] = useState({});
+  const [itemContent, setItemContent] = useState(null);
+  const [prevItem, setPrevItem] = useState(null);
   const [option, setOption] = useState('articles');
+  const [paginate, setPaginate] = useState({
+    limit: DEFAULT_SIZE,
+    offset: 0,
+  });
   const [fileList, setFileList] = useState([
-    {
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
+    // {
+    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    // },
   ]);
+
 
   const handleChange = (e) => {
     let values;
@@ -36,48 +55,68 @@ const ManageFinanceKnowledge = () => {
 
   const handleFileList = ({ fileList: newFile }) => {
     setFileList(newFile);
-    /* console.log(newFile[0]) */
     setItemContent({ ...itemContent, image: newFile[0]?.originFileObj });
   };
 
-  const handleCreate = () => {
-    const data = new FormData();
-    data.append('title', 'title');
-    data.append('subTitle', '');
-    data.append('image', '');
-    data.append('body', '');
-    data.append('url', '');
-    dispatch(createContent({ type: option, payload: data }));
-    setItemContent(itemContent[contents.length - 1]);
-  };
-
   const handleSave = (item) => {
-    const formData = new FormData();
-    formData.append('image', item.image);
-    formData.append('title', item.title);
-    formData.append('subTitle', item.subTitle);
-    formData.append('url', item.url);
-    formData.append('body', item.body);
-
-    dispatch(updateContent({ type: option, id: item.id, payload: formData }));
+    if (!item) {
+      ModalConfirm({
+        content: `Vui lòng nhập nội dung bài viết`,
+        callApi: () => {
+          return;
+        },
+      });
+    } else {
+      const formData = new FormData();
+      formData.append('image', item.image);
+      formData.append('title', item.title);
+      formData.append('subTitle', item.subTitle);
+      formData.append('url', item.url);
+      formData.append('body', item.body);
+      console.log(item);
+      if (!item.id) {
+        dispatch(createContent({ type: option, payload: formData }));
+        setItemContent(null);
+        setFileList([]);
+      } else {
+        dispatch(
+          updateContent({ type: option, id: item.id, payload: formData })
+        );
+        setItemContent(null);
+        setFileList([]);
+      }
+    }
   };
 
-  const handleCancel = (item) => {
-    console.log(item);
-    /* setItemContent(item) */
+  const handleCancel = () => {
+    setItemContent(prevItem);
   };
 
-  const handleDelete = (id) => {
-    // ModalConfirm()
-    dispatch(deleteContent({ type: option, id: id }));
-    setItemContent({});
+  const handleDelete = (item) => {
+    if (item) {
+      ModalConfirm({
+        content: `Xác nhận xóa nội dung`,
+        callApi: () => {
+          dispatch(deleteContent({ type: option, id: item.id })),
+          setItemContent(null);
+        },
+      });
+    } else {
+      ModalConfirm({
+        content: `Chọn nội dung cần xóa`,
+        callApi: () => {
+          return;
+        },
+      });
+    }
   };
-
   useEffect(() => {
     //fetch data
-    dispatch(retrieveData({ type: option, params: { limit: 10, offset: 0 } }));
-  }, [option]);
+    dispatch(retrieveData({ type: option, params: paginate }));
+  }, [option, contents.isReload, paginate]);
+  
 
+  
   return (
     <div className='manageFinanceKnowledge'>
       <div className='manageFinanceKnowledge-nav'>
@@ -95,44 +134,56 @@ const ManageFinanceKnowledge = () => {
                   value={option}
                 />
               </div>
-
-              <List
-                className='manageFinanceKnowledge-container_list'
-                size='small'
-                pagination={{
-                  className: 'manageFinanceKnowledge-pagination',
-                  pageSize: 7,
-                  showLessItems: true,
-                }}
-                header={
-                  <Title
-                    title={
-                      option !== 'q&a'
-                        ? t('manage content.articles list title')
-                        : t('manage content.q&a list title')
-                    }
-                  />
-                }
-                footer={
-                  <Button
-                    type='primary'
-                    shape='circle'
-                    icon={<img src={IconPlus} alt='' />}
-                    onClick={handleCreate}
-                  >
-                    Thêm mới
-                  </Button>
-                }
-                dataSource={contents}
-                renderItem={(item) => (
-                  <List.Item
-                    onClick={() => setItemContent(item)}
-                    className={`${item.id === itemContent?.id ? 'active' : ''}`}
-                  >
-                    <Typography.Text ellipsis>{item.title}</Typography.Text>
-                  </List.Item>
-                )}
-              />
+              <Spin spinning={loading === LOADING_STATUS.pending}>
+                <List
+                  locale={{ emptyText: 'Không có dữ liệu' }}
+                  className='manageFinanceKnowledge-container_list'
+                  size='small'
+                  // pagination={{
+                  //   className: 'manageFinanceKnowledge-pagination',
+                  //   pageSize: 7,
+                  //   showLessItems: true,
+                  // }}
+                  header={
+                    <Title
+                      title={
+                        option !== 'q&a'
+                          ? t('manage content.articles list title')
+                          : t('manage content.q&a list title')
+                      }
+                    />
+                  }
+                  footer={
+                    <Button
+                      type='primary'
+                      className='btn-add-new'
+                      icon={<img src={IconPlus} alt='' />}
+                      onClick={() => setItemContent(null)}
+                    >
+                      Thêm mới
+                    </Button>
+                  }
+                  dataSource={contents.data}
+                  renderItem={(item) => (
+                    <List.Item
+                      onClick={() => {
+                        setItemContent(item);
+                        setPrevItem(item);
+                      }}
+                      className={`${
+                        item.id === itemContent?.id ? 'active' : ''
+                      }`}
+                    >
+                      <Typography.Text ellipsis>{item.title}</Typography.Text>
+                    </List.Item>
+                  )}
+                ></List>
+              </Spin>
+              <Pagination
+                total={contents.totalItem}
+                setPaginate={setPaginate}
+                showSizeChanger={false}
+              ></Pagination>
             </Layout.Content>
           </Col>
 

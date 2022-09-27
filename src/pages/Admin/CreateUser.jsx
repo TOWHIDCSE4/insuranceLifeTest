@@ -1,12 +1,17 @@
 import {React, useState, useEffect} from 'react'
 import { Col, Row, Checkbox, Button, Form, Input, Select } from 'antd';
 import "../../assets/scss/Admin/create-user.scss"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {createUser} from '../../slices/userManagement';
 import axios from 'axios';
+import useFormErrors from "../../hooks/useFormErrors";
 const {Option} = Select;
 
 function Create_user(props) {
+  const {closeCreateUser} = props
+  //validate from api
+  const [form] = Form.useForm();
+  useFormErrors(form);
   const [dataCity, setDataCity]= useState([])
   const dispatch= useDispatch()
   useEffect(() => {
@@ -16,30 +21,18 @@ function Create_user(props) {
         setDataCity(response.data)
       })
   },[])
-  
-  const handleClose = () => {
-    props.closeCreateUser()
-  }
+
   const onFinish = (values) => {
     dispatch(createUser(values))
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
-
   return (
     <div className='container_create-user'>
-      <div className="creater_user-title">
-        <h3>Tạo mới nhân sự</h3>
-      </div>
-      <div className="line"></div>
-      <Form name="create_user-form"
+      <Form name="create_user-form" form={form}
         initialValues={{
-          remember: true,
+          remember: true
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Row gutter={[8, 16]}>
@@ -82,7 +75,8 @@ function Create_user(props) {
           <Col span={8}>
             <Form.Item
               label="ID login"
-              name="loginId">
+              name="loginId"
+            >
               <Input type="text" placeholder='Nhập' />
             </Form.Item>
           </Col>
@@ -130,7 +124,7 @@ function Create_user(props) {
               <Select
                 placeholder="Nhập"
                 style={{
-                  
+
                 }}
                 // onChange={handleChangeSelect}
               >
@@ -153,7 +147,7 @@ function Create_user(props) {
         </Row>
         <div className="line line_bottom"></div>
         <div className="group_btn">
-          <button className='btn-danger' onClick={handleClose}>Huỷ tạo</button>
+          <Button className='btn-danger' onClick={ () => closeCreateUser(false)}>Huỷ tạo</Button>
           <Form.Item>
             <Button type="primary" htmlType="submit" className='btn-primary'>Tạo mới</Button>
           </Form.Item>
