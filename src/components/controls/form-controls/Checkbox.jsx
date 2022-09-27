@@ -15,7 +15,7 @@ const CheckboxControl = ({ name, control, label = "", errors, disabled = false, 
           </Checkbox>
         )}
       />
-      <p className="">{errMsg}</p>
+      <p className="error-msg">{errMsg}</p>
     </>
   );
 };

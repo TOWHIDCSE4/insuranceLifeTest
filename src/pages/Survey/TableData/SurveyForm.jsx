@@ -5,31 +5,58 @@ import { CheckboxGroup } from "../../../components/controls";
 
 export const SurveyForm = () => {
   const { t } = useTranslation();
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   return (
     <div className="survey-form">
       <div>
         <h2 className="inheritance-title">{t("survey.formTitle.title2")}</h2>
         <div className="other-box1">
-          <CheckboxGroup control={control} name="other1" options={otherList1} className="checkbox-item" />
+          <CheckboxGroup
+            control={control}
+            name="other1"
+            options={otherList1}
+            errors={errors}
+            className="checkbox-item"
+          />
         </div>
       </div>
       <div>
         <h2 className="inheritance-title">{t("survey.formTitle.title3")}</h2>
         <div className="other-box1">
-          <CheckboxGroup control={control} name="other2" options={otherList2} className="checkbox-item" />
+          <CheckboxGroup
+            control={control}
+            name="other2"
+            options={otherList2}
+            errors={errors}
+            className="checkbox-item"
+          />
         </div>
       </div>
       <div>
         <h2 className="inheritance-title">{t("survey.formTitle.title4")}</h2>
         <div className="other-box1">
-          <CheckboxGroup control={control} name="other3" options={otherList3} className="checkbox-item" />
+          <CheckboxGroup
+            control={control}
+            name="other3"
+            options={otherList3}
+            errors={errors}
+            className="checkbox-item"
+          />
         </div>
       </div>
       <div>
         <h2 className="inheritance-title">{t("survey.formTitle.title5")}</h2>
         <div className="other-box2">
-          <CheckboxGroup control={control} name="other4" options={otherList4} className="checkbox-item" />
+          <CheckboxGroup
+            control={control}
+            name="other4"
+            options={otherList4}
+            errors={errors}
+            className="checkbox-item"
+          />
         </div>
       </div>
     </div>

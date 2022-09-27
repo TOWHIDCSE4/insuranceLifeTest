@@ -9,6 +9,8 @@ import { Checkbox as CheckboxControl } from "../../../components/controls";
 import { ClosingModal } from "../Modals/ClosingModal";
 import { createSurvey } from "../../../slices/surveys";
 import { isEmpty } from "lodash";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const CustomerServeyTable = () => {
   const { t } = useTranslation();
@@ -23,6 +25,7 @@ const CustomerServeyTable = () => {
   const othersValue = others ? JSON.parse(others) : {};
 
   const methods = useForm({
+    mode: "all",
     defaultValues: {
       other1: [],
       other2: [],
@@ -31,8 +34,14 @@ const CustomerServeyTable = () => {
       potential: false,
       hintName: "",
     },
+    // resolver: yupResolver(surveyValidation)
   });
-  const { watch, control, reset } = methods;
+  const {
+    watch,
+    control,
+    reset,
+    formState: { isDirty, isValid },
+  } = methods;
 
   useEffect(() => {
     if (!isEmpty(surveys?.survey)) {
@@ -447,3 +456,7 @@ const rowData = [
     label: "doubleAsset",
   },
 ];
+
+// const surveyValidation = yup.object().shape({
+
+// })
