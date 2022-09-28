@@ -9,13 +9,19 @@ import { Checkbox as CheckboxControl } from "../../../components/controls";
 import { ClosingModal } from "../Modals/ClosingModal";
 import { createSurvey } from "../../../slices/surveys";
 import { isEmpty } from "lodash";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const CustomerServeyTable = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [dataTable, setDataTable] = useState(rowData);
+  const [dataTable, setDataTable] = useState([]);
+  const [dataTables, setDataTables] = useState([]);
+  const [formValue, setFromValue] = useState({});
+  const [formValues, setFromValues] = useState([]);
+
+  console.log("formValue", formValue);
+  console.log("dataTable", dataTable);
+
+  //get data from redux
   const { surveys, customers } = useSelector((state) => state);
   const { selectedCustomer } = customers;
   const { finance, influence, priority, others, ...value } = surveys?.survey;
@@ -23,6 +29,8 @@ const CustomerServeyTable = () => {
   const influenceValue = influence ? JSON.parse(influence) : {};
   const priorityValue = priority ? JSON.parse(priority) : {};
   const othersValue = others ? JSON.parse(others) : {};
+
+  console.log("selectedCustomer", selectedCustomer?.customerId);
 
   const methods = useForm({
     mode: "all",
@@ -34,15 +42,92 @@ const CustomerServeyTable = () => {
       potential: false,
       hintName: "",
     },
-    // resolver: yupResolver(surveyValidation)
   });
-  const {
-    watch,
-    control,
-    reset,
-    formState: { isDirty, isValid },
-  } = methods;
+  const { watch, control, reset } = methods;
 
+  //generate form form data
+  useEffect(() => {
+    if (isEmpty(surveys?.survey) && selectedCustomer?.customerId) {
+      const formInfos = [...formValues];
+      if (formInfos?.length === 0) {
+        formInfos.push(generateFormData(selectedCustomer?.customerId));
+      } else {
+        const isIdExist = formInfos.some((item) => item?.id === selectedCustomer?.customerId);
+        if (!isIdExist) {
+          formInfos.push(generateFormData(selectedCustomer?.customerId));
+        }
+      }
+      setFromValues(formInfos);
+    }
+  }, [selectedCustomer, surveys?.survey]);
+  useEffect(() => {
+    if (isEmpty(surveys?.survey) && selectedCustomer?.customerId) {
+      const dataInfos = [...dataTables];
+      if (dataInfos.length === 0) {
+        dataInfos.push(generateTableData(selectedCustomer?.customerId));
+      } else {
+        const isIdExist = dataInfos.some((item) => item.customerId === selectedCustomer?.customerId);
+        if (!isIdExist) {
+          dataInfos.push(generateTableData(selectedCustomer?.customerId));
+        }
+      }
+      setDataTables(dataInfos);
+    }
+  }, [selectedCustomer, surveys?.survey]);
+
+  useEffect(() => {
+    const tData =
+      selectedCustomer?.customerId && dataTables?.length > 0
+        ? dataTables?.find((item) => item.customerId === selectedCustomer?.customerId)
+        : {};
+
+    if (!isEmpty(tData)) {
+      setDataTable(tData?.data);
+    }
+  }, [dataTables]);
+
+  useEffect(() => {
+    const fData =
+      selectedCustomer?.customerId && formValues?.length > 0
+        ? formValues?.find((item) => item?.id === selectedCustomer?.customerId)
+        : {};
+    if (!isEmpty(fData)) {
+      setFromValue(fData);
+      reset({
+        other1: fData?.others?.other1,
+        other2: fData?.others?.other1,
+        other3: fData?.others?.other1,
+        other4: fData?.others?.other1,
+        potential: fData?.isPotential,
+        hintName: fData?.hintName,
+      });
+    }
+  }, [formValues, selectedCustomer?.customerId]);
+
+  //for checkbox group
+  const watchOther1 = watch("other1", []);
+  const watchOther2 = watch("other2", []);
+  const watchOther3 = watch("other3", []);
+  const watchOther4 = watch("other4", []);
+  const watchPotential = watch("potential", false);
+  const watchHintName = watch("hintName", "");
+
+  useEffect(() => {
+    if (isEmpty(surveys?.survey) && formValues?.length > 0) {
+      const formInfos = [...formValues];
+      const currentIndex = formInfos?.findIndex((item) => item?.id === selectedCustomer?.customerId);
+      const selectedFormInfo = formInfos[currentIndex];
+      selectedFormInfo["hintName"] = watchHintName;
+      selectedFormInfo["isPotential"] = watchPotential;
+      selectedFormInfo["others"]["other1"] = watchOther1;
+      selectedFormInfo["others"]["other2"] = watchOther2;
+      selectedFormInfo["others"]["other3"] = watchOther3;
+      selectedFormInfo["others"]["other4"] = watchOther4;
+      formInfos[currentIndex] = selectedFormInfo;
+    }
+  }, [watchOther1, watchOther2, watchOther3, watchOther4, watchPotential, watchHintName]);
+
+  // for survey details
   useEffect(() => {
     if (!isEmpty(surveys?.survey)) {
       const tableData = [
@@ -130,7 +215,10 @@ const CustomerServeyTable = () => {
   }, [surveys?.survey]);
 
   const handleCheckboxChangeFactory = (rowIndex, columnKey) => (event) => {
-    const newCheckboxState = [...dataTable];
+    const tableInfos = [...dataTables];
+    const currentIndex = tableInfos.findIndex((item) => item.customerId === selectedCustomer?.customerId);
+    const selectedTableInfo = tableInfos[currentIndex];
+    const newCheckboxState = [...selectedTableInfo?.data];
 
     if (["infulence1", "infulence2", "infulence3"].includes(columnKey)) {
       let infulence = "";
@@ -170,13 +258,21 @@ const CustomerServeyTable = () => {
       newCheckboxState[rowIndex]["finance1"] = finance1;
       newCheckboxState[rowIndex]["finance2"] = finance2;
     }
-    setDataTable(newCheckboxState);
+
+    selectedTableInfo["data"] = newCheckboxState;
+    tableInfos[currentIndex] = selectedTableInfo;
+    setDataTables(tableInfos);
   };
 
   const handleInput = (rowIndex, columnKey) => (event) => {
-    const newCheckboxState = [...dataTable];
+    const tableInfos = [...dataTables];
+    const currentIndex = tableInfos.findIndex((item) => item.customerId === selectedCustomer?.customerId);
+    const selectedTableInfo = tableInfos[currentIndex];
+    const newCheckboxState = [...selectedTableInfo?.data];
     newCheckboxState[rowIndex][columnKey] = event.target.value;
-    setDataTable(newCheckboxState);
+    selectedTableInfo["data"] = newCheckboxState;
+    tableInfos[currentIndex] = selectedTableInfo;
+    setDataTables(tableInfos);
   };
 
   const columns = [
@@ -291,13 +387,6 @@ const CustomerServeyTable = () => {
     }
   }, [dataTable]);
 
-  const watchOther1 = watch("other1", []);
-  const watchOther2 = watch("other2", []);
-  const watchOther3 = watch("other3", []);
-  const watchOther4 = watch("other4", []);
-  const watchPotential = watch("potential", false);
-  const watchHintName = watch("hintName", "");
-
   const onSubmit = () => {
     const familyData = dataTable.find((data) => data.label === "family");
     const bachelorData = dataTable.find((data) => data.label === "bachelor");
@@ -305,7 +394,7 @@ const CustomerServeyTable = () => {
     const retireData = dataTable.find((data) => data.label === "retire");
     const doubleAssetData = dataTable.find((data) => data.label === "doubleAsset");
 
-    const formData = {
+    const submitFormData = {
       apptId: 0,
       customerId: selectedCustomer?.customerId,
       influence: {
@@ -338,10 +427,10 @@ const CustomerServeyTable = () => {
         },
       },
       others: {
-        ans1: watchOther1,
-        ans2: watchOther2,
-        ans3: watchOther3,
-        ans4: watchOther4,
+        ans1: formValue?.others?.other1,
+        ans2: formValue?.others?.other2,
+        ans3: formValue?.others?.other3,
+        ans4: formValue?.others?.other4,
       },
       prior: {
         family: +familyData?.prior,
@@ -350,12 +439,12 @@ const CustomerServeyTable = () => {
         retire: +retireData?.prior,
         doubleAsset: +doubleAssetData?.prior,
       },
-      hintName: watchHintName,
-      isPotential: watchPotential,
+      hintName: formValue?.hintName,
+      isPotential: formValue?.isPotential,
     };
-    dispatch(createSurvey(formData));
+    dispatch(createSurvey(submitFormData));
 
-    console.log("form data", formData);
+    console.log("form data", submitFormData);
   };
 
   return (
@@ -384,79 +473,94 @@ const CustomerServeyTable = () => {
 
 export default CustomerServeyTable;
 
-const rowData = [
-  {
-    key: 1,
-    type: "Quỹ dự phòng đảm bảo tài chính cho người mà anh/chị yêu thương",
-    infulence: "",
-    infulence1: "",
-    infulence2: "",
-    infulence3: "",
-    finance: "",
-    finance1: "",
-    finance2: "",
-    money: "12000",
-    prior: 1,
-    label: "family",
-  },
-  {
-    key: 2,
-    type: "Quỹ đảm bảo hoàn thành bậc cử nhân",
-    infulence: "",
-    infulence1: "",
-    infulence2: "",
-    infulence3: "",
-    finance: "",
-    finance1: "",
-    finance2: "",
-    money: "12000",
-    prior: 2,
-    label: "bachelor",
-  },
-  {
-    key: 3,
-    type: "Quỹ khởi nghiệp chắp cánh cho con vào đời",
-    infulence: "",
-    infulence1: "",
-    infulence2: "",
-    infulence3: "",
-    finance: "",
-    finance1: "",
-    finance2: "",
-    money: "12000",
-    prior: 3,
-    label: "son",
-  },
-  {
-    key: 4,
-    type: "Quỹ lương hưu từ năm 61-85 tuổi",
-    infulence: "",
-    infulence1: "",
-    infulence2: "",
-    infulence3: "",
-    finance: "",
-    finance1: "",
-    finance2: "",
-    money: "12000",
-    prior: 4,
-    label: "retire",
-  },
-  {
-    key: 5,
-    type: "Quỹ đầu tư gấp đôi tài sản",
-    infulence: "",
-    infulence1: "",
-    infulence2: "",
-    infulence3: "",
-    finance: "",
-    finance1: "",
-    finance2: "",
-    money: "12000",
-    prior: 5,
-    label: "doubleAsset",
-  },
-];
+const generateTableData = (id) => {
+  return {
+    customerId: id,
+    data: [
+      {
+        key: 1,
+        type: "Quỹ dự phòng đảm bảo tài chính cho người mà anh/chị yêu thương",
+        infulence: "",
+        infulence1: "",
+        infulence2: "",
+        infulence3: "",
+        finance: "",
+        finance1: "",
+        finance2: "",
+        money: "12000",
+        prior: 1,
+        label: "family",
+      },
+      {
+        key: 2,
+        type: "Quỹ đảm bảo hoàn thành bậc cử nhân",
+        infulence: "",
+        infulence1: "",
+        infulence2: "",
+        infulence3: "",
+        finance: "",
+        finance1: "",
+        finance2: "",
+        money: "12000",
+        prior: 2,
+        label: "bachelor",
+      },
+      {
+        key: 3,
+        type: "Quỹ khởi nghiệp chắp cánh cho con vào đời",
+        infulence: "",
+        infulence1: "",
+        infulence2: "",
+        infulence3: "",
+        finance: "",
+        finance1: "",
+        finance2: "",
+        money: "12000",
+        prior: 3,
+        label: "son",
+      },
+      {
+        key: 4,
+        type: "Quỹ lương hưu từ năm 61-85 tuổi",
+        infulence: "",
+        infulence1: "",
+        infulence2: "",
+        infulence3: "",
+        finance: "",
+        finance1: "",
+        finance2: "",
+        money: "12000",
+        prior: 4,
+        label: "retire",
+      },
+      {
+        key: 5,
+        type: "Quỹ đầu tư gấp đôi tài sản",
+        infulence: "",
+        infulence1: "",
+        infulence2: "",
+        infulence3: "",
+        finance: "",
+        finance1: "",
+        finance2: "",
+        money: "12000",
+        prior: 5,
+        label: "doubleAsset",
+      },
+    ],
+  };
+};
 
-// const surveyValidation = yup.object().shape({
-
-// })
+const generateFormData = (id) => {
+  return {
+    id: id,
+    others: {
+      other1: [],
+      other2: [],
+      other3: [],
+      other4: [],
+    },
+    hintName: "",
+    isPotential: false,
+  };
+};
