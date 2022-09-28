@@ -14,15 +14,17 @@ const CreatePayment = (props) => {
 
   const handleAddNew = (values) => {
     const newPayment = {
-      ...values,
-      startDate: moment(values.startDate?._d).format(),
-      dueDate: moment(values.dueDate?._d).format(),
+      loginId:values.loginId,
+      startDate: moment(values.time[0]?._d).format(),
+      dueDate: moment(values.time[1]?._d).format(),
       amount: +values.amount,
+      description:values.description
     };
+    console.log(newPayment)
     dispatch(createPayment(newPayment));
     if (loading === LOADING_STATUS.succeeded) {
       setIsModalOpen(false);
-      form.resetFields()
+      form.resetFields();
     }
   };
 
@@ -35,7 +37,9 @@ const CreatePayment = (props) => {
         footer={false}
         keyboard={false}
         centered
-        onCancel={() =>{ setIsModalOpen(false),form.resetFields()}}
+        onCancel={() => {
+          setIsModalOpen(false), form.resetFields();
+        }}
       >
         <Form name='nest-messages' onFinish={handleAddNew} form={form}>
           <Form.Item
@@ -49,7 +53,7 @@ const CreatePayment = (props) => {
           >
             <Input placeholder='ID login' />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name='userFullname'
             label='Họ và tên:'
             rules={[
@@ -59,24 +63,24 @@ const CreatePayment = (props) => {
             ]}
           >
             <Input placeholder='Nhập' />
-            {/* <Select
-              showSearch
-              placeholder='Select a person'
-              optionFilterProp='children'
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {users &&
-                users.map((user) => (
-                  <Select.Option value={user.id} key={user.id}>
-                    {user.userFullname}
-                  </Select.Option>
-                ))}
-            </Select> */}
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
+            name='time'
+            label='Thời gian:'
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <DatePicker.RangePicker
+              placeholder={['Ngày thanh toán','Ngày kết thúc']}
+  
+            />
+          </Form.Item>
+
+          {/* <Form.Item
             name='startDate'
             label='Ngày thanh toán'
             rules={[
@@ -99,7 +103,7 @@ const CreatePayment = (props) => {
             ]}
           >
             <DatePicker placeholder='Chọn ngày kết thúc' />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item name='amount' label='Số tiền' rules={[{ required: true }]}>
             <Input />
           </Form.Item>

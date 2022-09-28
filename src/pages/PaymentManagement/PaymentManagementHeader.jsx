@@ -3,6 +3,7 @@ import InputSearch from '../../components/common/InputSearch';
 
 const PaymentManagementHeader = (props) => {
   const { title, search = false, setPayload } = props;
+
   return (
     <div className='paymentManagement-header'>
       <div className='paymentManagement-header_title'>

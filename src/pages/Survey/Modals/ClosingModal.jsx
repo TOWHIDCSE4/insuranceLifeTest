@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Button, Popover, Divider, Form, Input } from "antd";
+import { Button, Popover, Divider } from "antd";
 import { useTranslation } from "react-i18next";
+import { useFormContext } from "react-hook-form";
+import { Input, FieldLabel } from "../../../components/controls";
 
 export const ClosingModal = ({ onSubmit }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
+  const { control } = useFormContext();
 
   const handleOpenChange = (newOpen) => {
     setOpen(newOpen);
@@ -15,17 +17,12 @@ export const ClosingModal = ({ onSubmit }) => {
     setOpen(false);
   };
 
-  const onOk = () => {
-    onSubmit(name);
-  };
-
   const content = (
     <div className="closing-container">
       <div className="closing-body">
         <div className="form-group">
-          <Form.Item label="Tên gợi nhớ" name="reminiscent_name" labelCol={{ span: 24 }}>
-            <Input placeholder="Esther Howard" className="closing__input" onChange={(e) => setName(e.target.value)} />
-          </Form.Item>
+          <FieldLabel name="hintName" label="Tên gợi nhớ" />
+          <Input control={control} name="hintName" className="form-control" />
         </div>
       </div>
       <Divider />
@@ -37,7 +34,7 @@ export const ClosingModal = ({ onSubmit }) => {
         </div>
 
         <div className="closing-btn">
-          <Button type="primary" htmlType="button" className="btn-primary" block onClick={onOk}>
+          <Button type="primary" htmlType="button" className="btn-primary" block onClick={onSubmit}>
             Tạo
           </Button>
         </div>

@@ -37,6 +37,7 @@ export const uploadFile = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const res = await importFile(params);
+      console.log(res)
       return { data: res.data, message: res.statusText };
     } catch (error) {
       console.log(error);

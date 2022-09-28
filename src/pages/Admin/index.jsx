@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Checkbox } from 'antd';
+import { Checkbox, Image} from 'antd';
 import Modal from '../../components/common/Modal'
 import "../../assets/scss/Admin/stylesAdmin.scss"
 import InputSearch from '../../components/common/InputSearch';
@@ -8,6 +8,11 @@ import TableCommon from "../../components/common/TableNormal";
 import Pagination from "../../components/common/Pagination";
 import ModalConfirm from '../../components/ModalConfirm';
 import { useDispatch, useSelector } from 'react-redux';
+import * as S from "../../components/styles";
+import Icon, {DeleteFilled} from '@ant-design/icons';
+import TrashSvg from '../../assets/images/icons/deleteIcon.svg';
+import { PageHeader, Typography } from 'antd';
+import {SettingOutlined, PlusOutlined, DownloadOutlined} from '@ant-design/icons';
 import {
   searchUser,
   uploadFiles,
@@ -32,6 +37,8 @@ export default function UserManagement() {
     limit: DEFAULT_SIZE,
     offset: 1
   });
+  
+  const TrashIcon = (props) => <Icon component={TrashSvg} {...props} />;
 
   const columns = [
     {
@@ -75,8 +82,8 @@ export default function UserManagement() {
       render: (record) => (
         <Checkbox
           id='qna'
-          defaultChecked={record.qna}
-          onChange={(e) => handleCheckboxChange(e, record.id, 'qna')}
+          defaultChecked={record.permissions.includes('qa')}
+          onChange={(e) => {handleCheckboxChange(e, record.id, 'qna'),console.log(record)}}
         />
       ),
     },
@@ -89,7 +96,7 @@ export default function UserManagement() {
       render: (record) => (
         <Checkbox
           id='isPaid'
-          defaultChecked={record.isPaid}
+          defaultChecked={record.permissions.includes('payment')}
           onChange={(e ) => handleCheckboxChange(e, record.id, 'isPaid')}
         />
       ),
@@ -103,7 +110,7 @@ export default function UserManagement() {
       render: (record) => (
         <Checkbox
           id='isAdmin'
-          defaultChecked={record.isAdmin}
+          defaultChecked={record.permissions.includes('admin')}
           onChange={(e) => handleCheckboxChange(e, record.id, 'isAdmin')}
         />
       ),
@@ -128,31 +135,51 @@ export default function UserManagement() {
     {
       title: '',
       dataIndex: '',
-      width: '110px',
+      width: '50px',
       key: 10,
-      align: 'center',
+      align: 'right',
       render: (record) => (
-        <button
-          className='btn_reset-user btn-bgWhite-textGreen-borGreen'
-          onClick={() => handelResetUser(record.id)}
-        >
-          Khởi tạo lại
-        </button>
+        // <button
+        //   className='btn_reset-user btn-bgWhite-textGreen-borGreen'
+        //   onClick={() => handelResetUser(record.id)}
+        // >
+        //   Khởi tạo lại
+        // </button>
+        <div>
+          <S.Button
+            size={'small'}
+            onClick={() => handleDeleteUser(record)}
+          >
+            Khởi tạo lại
+          </S.Button>
+          <S.Button
+            className='btn-hover-danger'
+            icon={<DeleteFilled />}
+            onClick={() => handleDeleteUser(record)}
+          />
+        </div>
       ),
     },
-    {
-      title: '',
-      width: '30px',
-      align: 'center',
-      key: 11,
-      render: (record) => (
-        <img
-          className='dustbin_icon'
-          src='./images/dustbin_icon.svg'
-          onClick={() => handleDeleteUser(record)}
-        />
-      ),
-    }
+    // {
+    //   title: '',
+    //   width: '30px',
+    //   align: 'center',
+    //   key: 11,
+    //   // render: (record) => (
+    //   //   <img
+    //   //     className='dustbin_icon'
+    //   //     src='./images/dustbin_icon.svg'
+    //   //     onClick={() => handleDeleteUser(record)}
+    //   //   />
+    //   // ),
+    //   render: (record) => (
+    //     <S.Button
+    //       className='btn-hover-danger'
+    //       icon={<DeleteFilled />}
+    //       onClick={() => handleDeleteUser(record)}
+    //     />
+    //   ),
+    // }
   ];
 
   const handleDeleteUser = (record) => {
@@ -236,52 +263,27 @@ export default function UserManagement() {
 
   return (
     <>
-      <div className='admin_header'>
-        <h3>Admin quản lý khách hàng Manulife</h3>
-        <div className='admin_header_func'>
-          <button
-            className='func_delete-user btn-bgWhite-textGreen-borGreen'
-            onClick={handleDeleteUsers}
-          >
-            Xoá
-          </button>
-          <button
-            className='func_reset-user btn-bgWhite-textGreen-borGreen'
-            onClick={handelResetUsers}
-          >
-            Khởi tạo lại
-          </button>
-          <input type='file' ref={input_file} />
-          <button className='func_import btn-primary' onClick={handleImport}>
-            <img src='./images/import_icon_admin.svg' />
+      <input type='file' ref={input_file} />
+      <S.PageHeader
+        className="site-page-header-responsive"
+        backIcon={false}
+        onBack={() => window.history.back()}
+        title="Admin quản lý khách hàng Manulife"
+        extra={[
+          <S.Button key="1" onClick={handleDeleteUsers}>Xóa</S.Button>,
+          <S.Button key="2" onClick={handelResetUsers}>Khởi tạo lại</S.Button>,
+          <S.Button key="3" onClick={handleImport} type="primary" icon={<DownloadOutlined style={{ fontSize: '14px' }}/>}>
             Import
-          </button>
-          <button
-            className='func_create-user btn-primary'
-            onClick={() => setIsCreateUser(true)}
-          >
-            <img src='./images/plus_icon_admin.svg' />
+          </S.Button>,
+          <S.Button key="4" onClick={() => setIsCreateUser(true)} type="primary" icon={<PlusOutlined />}>
             Tạo mới
-          </button>
-          <img
-            className='icon_setting'
-            src='./images/setting_icon_admin.svg'
-            onClick={() => setIssettingLog(!isSettingLog)}
-          />
-          {isSettingLog && (
-            <div className='setting_modal'>
-              <div className='watch-log'>
-                <img src='./images/clock_icon.svg' />
-                <label>Xem log</label>
-              </div>
-              <div className='change-language'>
-                <img src='./images/global_earth_icon.svg' />
-                <label>Cập nhật ngôn ngữ</label>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+          </S.Button>,
+          <S.Button key="5" onClick={() => setIssettingLog(!isSettingLog)} className='btn-hover-primary' icon={<SettingOutlined key="6" style={{ fontSize: '20px' }}/>}></S.Button>
+           
+        ]}
+      >
+      </S.PageHeader>
+      
       <div className='content-box container_admin'>
         <div className='admin_title'>
           <h3>Danh sách tài khoản</h3>

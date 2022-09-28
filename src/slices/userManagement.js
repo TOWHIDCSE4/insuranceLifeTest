@@ -86,9 +86,6 @@ const useManagement = createSlice({
     [createUser.fulfilled]: (state) => {
       state.refreshList=true
     },
-    // [createUser.rejected]: (state, action) => {
-    //   state.messageError = action.payload;
-    // },
     [retrieveData.fulfilled]: (state, action) => {
       state.totalItem = action.payload.total;
       state.data = action.payload.data;
@@ -98,7 +95,7 @@ const useManagement = createSlice({
       state.refreshList=true
     },
     [updateUser.fulfilled]: (state, action) => {
-      state.refreshList=true
+      // state.refreshList=true
     },
     [removeUser.fulfilled]: (state, action) => {
       state.refreshList=true

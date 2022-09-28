@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Empty, Table } from 'antd';
 import React, { memo, useEffect, useState } from 'react';
 import calendarIcon from '../../assets/images/icons/calendar.svg';
 import { getTimeByTZ } from '../../helper/index';
@@ -8,7 +8,7 @@ const columns = [
     title: 'Ngày',
     dataIndex: 'date',
     key: 'date',
-    width:'140px'
+    width: '140px',
   },
   {
     title: 'Nội dung',
@@ -19,7 +19,7 @@ const columns = [
 
 const PaymentHistory = ({ customer }) => {
   const format = new Intl.NumberFormat('vi-VN').format(customer?.amount);
-  const [history, setHistory] = useState(null)
+  const [history, setHistory] = useState(null);
 
   useEffect(() => {
     const histories = [];
@@ -27,7 +27,7 @@ const PaymentHistory = ({ customer }) => {
       date: getTimeByTZ(customer?.dueDate),
       content: customer?.description,
     });
-    setHistory(histories)
+    setHistory(histories);
   }, [customer]);
 
   return (
@@ -49,9 +49,7 @@ const PaymentHistory = ({ customer }) => {
                     <span>Ngày thanh toán</span>
                   </div>
                   <div className='paymentHistory-time_date'>
-                    <span>
-                      {getTimeByTZ(customer?.startDate)}
-                    </span>
+                    <span>{getTimeByTZ(customer?.startDate)}</span>
                   </div>
                 </div>
 
@@ -61,9 +59,7 @@ const PaymentHistory = ({ customer }) => {
                     <span>Ngày hiệu lực</span>
                   </div>
                   <div className='paymentHistory-time_date'>
-                    <span>
-                      {getTimeByTZ(customer?.startDate)}
-                    </span>
+                    <span>{getTimeByTZ(customer?.startDate)}</span>
                   </div>
                 </div>
 
@@ -91,7 +87,16 @@ const PaymentHistory = ({ customer }) => {
           </div>
         </>
       ) : (
-        <></>
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          style={{
+            minHeight: '300px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+          }}
+        />
       )}
     </div>
   );

@@ -60,12 +60,6 @@ const PrivateRoutes = [
     icon: Care,
   },
   {
-    path: '/q&a',
-    key: 'q&a',
-    label: 'Hỏi đáp',
-    icon: QA,
-  },
-  {
     path: '/finance-support',
     key: 'finance-support',
     label: 'Kiến thức tư vấn tài chính',

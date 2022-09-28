@@ -21,7 +21,7 @@ $grey-light-bg-color: #f8f8f8;
 $green-table-boder: #62c78f;
 $blue-dark-color: #2b3042;
 $blue-bg-color: #393e50;
-$grey-table-boder: #cccccc;
+$grey-table-border: #cccccc;
 $green-table-bg: #35b46f;
 $yellow-light-checkbox: #f6a447;
 $list-border: #eeeeee;
@@ -38,3 +38,15 @@ $button-height-small: 3rem;
 $input-hegiht: 4rem;
 
 $input-hegiht-small: 3rem;
+
+$border-radius-base: 2px;
+$border-radius-sm: 2px;
+
+// control border
+$control-border-radius: $border-radius-base;
+
+$btn-border-radius-base: 2px;
+$btn-border-radius-sm: 2px;
+
+$btn-primary-color: #fff;
+$btn-primary-bg: $primary-color;

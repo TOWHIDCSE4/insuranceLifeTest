@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { ConfigProvider, Empty  } from 'antd';
+import { ConfigProvider } from 'antd';
 // import locale from 'antd/lib/locale/vi_VN';
 import locale from './locales/vi_VN';
 import Router from './routes';
@@ -25,7 +25,7 @@ function App() {
         <Router />
       </BrowserRouter>
     </ConfigProvider>
-  )
+  );
 }
 
 export default App;

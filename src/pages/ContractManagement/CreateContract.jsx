@@ -15,12 +15,12 @@ import {
   createContract,
   updateContract,
 } from '../../slices/contractManagement';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { getCustoms } from '../../slices/contractManagement';
 import useFormErrors from '../../hooks/useFormErrors'
 
 function CreateContract(props) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   useFormErrors(form);
   const { setVisibleModal, dataEdit } = props
@@ -34,13 +34,13 @@ function CreateContract(props) {
   var { Option } = AutoComplete;
 
   const onFinish = (values) => {
+    (values.depositTerm == "Tháng") ? values.depositTerm = 30 : (values.depositTerm == "Nửa năm") ? values.depositTerm = 180 : values.depositTerm = 360
     const data = {
       contractNumber: values.contractNumber,
-      customerId: +id,
-      solutionId: +id,
+      customerId: 61,
       beneficiary: values.beneficiary,
       value: +values.value,
-      startDate: moment(values.startDate._d).format(),
+      startDate: moment(values.timetill._d).format(),
       duration: +values.duration,
       depositTerm: +values.depositTerm,
     };
@@ -50,6 +50,7 @@ function CreateContract(props) {
       dispatch(createContract(data));
     }
   };
+  // console.log(loading);
 
   //autoComplete
   const onSearch = (searchText) => {
@@ -57,11 +58,14 @@ function CreateContract(props) {
   };
 
   useEffect(() => {
+    (dataEdit.depositTerm == 30) ? dataEdit.depositTerm = "Tháng" : (dataEdit.depositTerm == 180) ? dataEdit.depositTerm = "Nửa năm" : dataEdit.depositTerm = "Năm"
     if (Object.keys(dataEdit).length > 0) {
-      form.setFieldsValue({...dataEdit, ...{date: moment(dataEdit.date)}})
+      // let changeDuraton = dataEdit.
+      form.setFieldsValue({ ...dataEdit, ...{ date: moment(dataEdit.date) } })
     } else {
       form.resetFields()
     }
+    
   }, [dataEdit])
 
   return <Form
@@ -84,7 +88,7 @@ function CreateContract(props) {
             },
           ]}
         >
-          <Input placeholder='Nhập' type='number' className="input-item-outline"/>
+          <Input placeholder='Nhập' type='number' className="input-item-outline" />
         </Form.Item>
       </Col>
       <Col span={6}>
@@ -112,7 +116,7 @@ function CreateContract(props) {
                   }}
                 >
                   <span>{item.fullname}</span>
-                  <span>ID: {item.customerId}</span>
+                  <span>Phone: {item.phone1}</span>
                 </div>
               </Option>
             ))}
@@ -126,11 +130,10 @@ function CreateContract(props) {
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập trường này.',
             },
           ]}
         >
-          <Input placeholder='Nhập' className="input-item-outline"/>
+          <Input placeholder='Nhập' className="input-item-outline" />
         </Form.Item>
       </Col>
       <Col span={6}>
@@ -140,40 +143,37 @@ function CreateContract(props) {
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập trường này.',
             },
           ]}
         >
-          <Input placeholder='Nhập' type='number' className="input-item-outline"/>
+          <Input placeholder='Nhập' type='number' className="input-item-outline" />
         </Form.Item>
       </Col>
       <Col span={6}>
-        {props.data?.createdAt ? (
+        {dataEdit.createdAt ? (
           <Form.Item
             label='Ngày hiệu lực'
-            name='startDate'
-            initialValue={moment(props.data?.createdAt) || 'DD/MM/YYYY'}
+            name={["timetill"]}
+            initialValue={moment(dataEdit?.createdAt) || 'DD/MM/YYYY'}
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập trường này.',
               },
             ]}
           >
-            <DatePicker format={'DD/MM/YYYY'} className="input-item-outline"/>
+            <DatePicker format={'DD/MM/YYYY'} placeholder='DD/MM/YYYY' />
           </Form.Item>
         ) : (
           <Form.Item
             label='Ngày hiệu lực'
-            name='startDate'
+            name={["timetill"]}
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập trường này.',
               },
             ]}
           >
-            <DatePicker placeholder='DD/MM/YYYY' format={'DD/MM/YYYY'} className="input-item-outline"/>
+            <DatePicker placeholder='DD/MM/YYYY' format={'DD/MM/YYYY'} />
           </Form.Item>
         )}
       </Col>
@@ -184,21 +184,20 @@ function CreateContract(props) {
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập trường này.',
             },
           ]}
         >
-          <Input placeholder='Nhập' className="input-item-outline"/>
+          <Input placeholder='Nhập' className="input-item-outline" />
         </Form.Item>
       </Col>
       <Col span={6}>
         <Form.Item
           label='Chu kỳ nộp phí'
           name='depositTerm'
+          initialValue={dataEdit.depositTerm}
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập trường này.',
             },
           ]}
         >

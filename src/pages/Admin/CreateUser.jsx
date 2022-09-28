@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from 'react'
 import { Col, Row, Checkbox, Button, Form, Input, Select } from 'antd';
 import "../../assets/scss/Admin/create-user.scss"
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {createUser} from '../../slices/userManagement';
 import axios from 'axios';
 import useFormErrors from "../../hooks/useFormErrors";
@@ -13,16 +13,18 @@ function Create_user(props) {
   const [form] = Form.useForm();
   useFormErrors(form);
   const [dataCity, setDataCity]= useState([])
+  const loading = useSelector((state)=>state.loading)
   const dispatch= useDispatch()
+  
   useEffect(() => {
     axios.get('https://provinces.open-api.vn/api/')
       .then(function (response) {
-        console.log(response.data);
         setDataCity(response.data)
       })
   },[])
 
   const onFinish = (values) => {
+    console.log(values);
     dispatch(createUser(values))
   };
 
@@ -50,7 +52,6 @@ function Create_user(props) {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập Họ và tên.',
                 },
               ]}
             >
@@ -64,7 +65,6 @@ function Create_user(props) {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập số điện thoai.',
                 },
               ]}
             >
@@ -76,6 +76,16 @@ function Create_user(props) {
             <Form.Item
               label="ID login"
               name="loginId"
+              rules={[
+                {
+                  validator(_,) {
+                    if (loading.message == "user_exist") {
+                      return Promise.reject('Tài khoản đã tồn tại');
+                    }
+                    return Promise.resolve();
+                  },
+                }
+              ]}
             >
               <Input type="text" placeholder='Nhập' />
             </Form.Item>
@@ -84,6 +94,16 @@ function Create_user(props) {
             <Form.Item
               label="Email"
               name="email"
+              rules={[
+                {
+                  validator(_,) {
+                    if (loading.message == "user_exist") {
+                      return Promise.reject('Tài khoản đã tồn tại');
+                    }
+                    return Promise.resolve();
+                  },
+                }
+              ]}
             >
               <Input type="text" placeholder='Nhập' />
             </Form.Item>

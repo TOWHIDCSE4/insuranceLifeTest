@@ -3,14 +3,20 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const GuestGuard = ({ element }) => {
   const { isAuth, me } = useSelector((state) => state.auth);
-  const { isAdmin } = me;
+  const { isAdmin, permissions } = me;
 
   if (!isAuth) {
-    return <Navigate to='/auth' />;
+    return <Navigate to="/auth" />;
   }
 
-  if (isAuth && isAdmin) {
-    return <Navigate to='/admin' />;
+  if (isAuth) {
+    if (permissions.includes('payment')) {
+      return <Navigate to="/admin/payment" />;
+    } else if (permissions.includes('qa')) {
+      return <Navigate to="/admin/q&a" />;
+    } else if (permissions.includes('admin')) {
+      return <Navigate to="/admin" />;
+    }
   }
 
   return element;

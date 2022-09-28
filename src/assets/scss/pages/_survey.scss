@@ -142,7 +142,7 @@
           font-family: "Quicksand";
           font-style: normal;
           font-weight: 700;
-          font-size: 14px;
+          font-size: 1.4rem;
           line-height: 18px;
           color: #333333;
         }
@@ -456,5 +456,28 @@
         }
       }
     }
+  }
+}
+
+//new styles
+
+.other-box {
+  border: 1px solid $grey-border-color;
+  padding: 10px;
+  border-radius: 10px;
+  display: grid;
+  justify-content: space-between;
+}
+
+.other-box1 {
+  @extend .other-box;
+  .ant-checkbox-group-item {
+    margin-right: 40px;
+  }
+}
+.other-box2 {
+  @extend .other-box;
+  .ant-checkbox-group-item {
+    margin-right: 10px;
   }
 }

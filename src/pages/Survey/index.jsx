@@ -9,6 +9,11 @@ import TabMenu from "./Tabs/TabMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerHistoryById } from "../../slices/surveys";
 import { getCustomerList, setSelectedCustomer } from "../../slices/customers";
+import { isEmpty } from "lodash";
+import calender from "../../assets/images/icons/calendar.svg";
+import left_arrow from "../../assets/images/icons/left-arrow.svg";
+import * as S from '../../components/styles';
+
 
 const Survey = () => {
   const { t } = useTranslation();
@@ -16,7 +21,7 @@ const Survey = () => {
   const dispatch = useDispatch();
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [payload, setPayload] = useState("");
-  const { customers } = useSelector((state) => state);
+  const { customers, surveys } = useSelector((state) => state);
   const { data, selectedCustomer } = customers;
 
   useEffect(() => {
@@ -80,24 +85,37 @@ const Survey = () => {
                   </div>
 
                   <div className="container-right">
-                    <div className="container-right-header">
-                      <div>
-                        <Button type="primary" className="btn-primary" onClick={historyHandler}>
-                          {t("common.history")}
-                        </Button>
+                    {isEmpty(surveys?.survey) ? (
+                      <div className="container-right-header">
+                        <div>
+                          <S.Button type="primary" onClick={historyHandler}>
+                            {t("common.history")}
+                          </S.Button>
+                        </div>
+                        <div className="right">
+                          <S.Button type="primary" onClick={solutionHandler}>
+                            {t("common.solution")}
+                          </S.Button>
+                          <S.Button type="primary" onClick={counselHandler}>
+                            {t("common.consultant")}
+                          </S.Button>
+                          <S.Button type="primary" onClick={appointmentHandler}>
+                            {t("common.booking")}
+                          </S.Button>
+                        </div>
                       </div>
-                      <div className="right">
-                        <Button type="primary" className="btn-primary" onClick={solutionHandler}>
-                          {t("common.solution")}
-                        </Button>
-                        <Button type="primary" className="btn-primary" onClick={counselHandler}>
-                          {t("common.consultant")}
-                        </Button>
-                        <Button type="primary" className="btn-primary" onClick={appointmentHandler}>
-                          {t("common.booking")}
-                        </Button>
+                    ) : (
+                      <div className="container-right-header">
+                        <div>
+                          <img src={left_arrow} alt="calender" height={12} style={{ marginRight: "5px" }} />
+                        </div>
+                        <div className="right">
+                          <img src={calender} alt="calender" height={16} style={{ marginRight: "5px" }} />
+                          <span>Ngày: 12/08/2022</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
                     <TabMenu />
                   </div>
                 </div>

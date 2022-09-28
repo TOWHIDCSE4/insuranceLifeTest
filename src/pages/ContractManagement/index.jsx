@@ -13,7 +13,7 @@ import { DEFAULT_SIZE } from '../../ultis/constant'
 
 export default function ContractManagement() {
   const dispatch = useDispatch()
-  const {data, totalItem} = useSelector((state)=>state.contractManagement)
+  const {data, totalItem, refreshData} = useSelector((state)=>state.contractManagement)
   const [visibleModal, setVisibleModal] = useState(false)
   const [dataEdit, setDataEdit] = useState(null)
   const [titleModal, setTitleModal] = useState('')
@@ -21,6 +21,7 @@ export default function ContractManagement() {
     limit: DEFAULT_SIZE,
     offset: 1
   });
+  
   const [inputText, setInputText]= useState('')
 
   const columns = [
@@ -74,14 +75,23 @@ export default function ContractManagement() {
     }
   ];
   
+  useEffect(()=>{
+    let offset = (paginate.offset - 1) * paginate.limit;
+    dispatch(retrieveData({limit: paginate.limit, offset:offset}))
+  },[])
+
   useEffect(() => {
     let offset = (paginate.offset - 1) * paginate.limit;
-    dispatch(retrieveData({userSearch: inputText, limit: paginate.limit, offset:offset}))
-  },[inputText])
+    inputText ?
+      dispatch(retrieveData({userSearch: inputText, limit: paginate.limit, offset:offset}))
+    :
+      dispatch(retrieveData({limit: paginate.limit, offset:offset}))
+  },[inputText,paginate,refreshData])
 
   const handleEditUser = (record) => {
     setDataEdit({...record})
     setVisibleModal(true)
+    console.log(record);
     setTitleModal('Thay đổi nội dung hợp đồng')
   }
 
@@ -105,7 +115,7 @@ export default function ContractManagement() {
       </div>
       <div className="contract_list">
         <Table dataSource={data} columnTable={columns} size='middle' />
-        <Pagination total={totalItem} pageSize={paginate.limit} setPaginate={setPaginate} />
+        <Pagination total={50} pageSize={paginate.limit} setPaginate={setPaginate} />
       </div>
     </div>
     <Modal isVisible={visibleModal} setIsVisible={setVisibleModal} title={titleModal} width={800} content={<CreateContract dataEdit={dataEdit} setVisibleModal={setVisibleModal} />} />

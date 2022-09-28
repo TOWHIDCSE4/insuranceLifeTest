@@ -82,7 +82,7 @@ const FinanceSupportCard = (props) => {
                 className={wrap ? 'col-wrap' : ''}
               >
                 <Image
-                  src={'https://suthatbaohiem.com/wp-content/uploads/2022/06/manulife-tuyen-dung-2022.png'}
+                  src={content?.image}
                   preview={false}
                   className={`image ${wrap ? 'image-wrap' : ''}`}
                   alt=''

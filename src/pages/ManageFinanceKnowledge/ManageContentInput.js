@@ -55,10 +55,9 @@ const ManageContentInput = (props) => {
             className='avatar-uploader'
             showUploadList
             onChange={onChange}
-            /* beforeUpload={() => { return false }} */
             beforeUpload={Upload.LIST_IGNORE}
             fileList={fileList}
-          /* disabled={fileList.length > 0 ? true : false} */
+            accept='.jpeg,.jpg,.png,.webp,.svg'
           >
             <div className='upload-content'>
               <CameraOutlined />

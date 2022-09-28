@@ -14,6 +14,7 @@ import PublicLayout from '../pages/Public/Layout';
 const Login = lazy(() => import('../pages/Auth/views/Login'));
 
 // MAIN VIEWS
+const Dashboard = lazy(() => import('../pages/Dashboard'));
 const CustomerCare = lazy(() => import('../pages/CustomerCare'));
 const FinanceConsultant = lazy(() => import('../pages/FinanceConsultant'));
 const Survey = lazy(() => import('../pages/Survey'));
@@ -21,36 +22,25 @@ const Contract_management = lazy(() => import('../pages/ContractManagement'));
 const FinancialSolution = lazy(() => import('../pages/FinancialSolution'));
 const FinanceKnowledge = lazy(() => import('../pages/FinanceKnowledge'));
 const Retirement = lazy(() => import('../pages/FinancialSolution/Retirement'));
-const StartupFund = lazy(() =>
-  import('../pages/FinancialSolution/StartupFund')
-);
+const StartupFund = lazy(() => import('../pages/FinancialSolution/StartupFund'));
 
-const InheritanceFund = lazy(() =>
-  import('../pages/FinancialSolution/InheritanceFund')
-);
-const ContingencyFund = lazy(() =>
-  import('../pages/FinancialSolution/ContingencyFund')
-);
-const HealthFoundation = lazy(() =>
-  import('../pages/FinancialSolution/HealthFoundation')
-);
-const EducationFoundation = lazy(() =>
-  import('../pages/FinancialSolution/EducationFoundation')
-);
-const IllustrateFiduciary = lazy(() =>
-  import('../pages/FinancialSolution/IllustrateFiduciary')
-);
+const InheritanceFund = lazy(() => import('../pages/FinancialSolution/InheritanceFund'));
+const ContingencyFund = lazy(() => import('../pages/FinancialSolution/ContingencyFund'));
+const HealthFoundation = lazy(() => import('../pages/FinancialSolution/HealthFoundation'));
+const EducationFoundation = lazy(() => import('../pages/FinancialSolution/EducationFoundation'));
+const IllustrateFiduciary = lazy(() => import('../pages/FinancialSolution/IllustrateFiduciary'));
 const PotentialCustomers = lazy(() => import('../pages/PotentialCustomers'));
 
-const AppointmentManagement = lazy(() =>
-  import('../pages/Main/views/AppointmentManagement')
-);
+const AppointmentManagement = lazy(() => import('../pages/Main/views/AppointmentManagement'));
+
 
 // ADMIN VIEWS
 const Admin = lazy(() => import('../pages/Admin/index'));
-const ManageFinanceKnowledge = lazy(() =>
-  import('../pages/ManageFinanceKnowledge')
+
+const ConfigUser =lazy(()=>
+  import('../pages/ConfigUser/index')
 );
+const ManageFinanceKnowledge = lazy(() => import('../pages/ManageFinanceKnowledge'));
 const PaymentManagement = lazy(() => import('../pages/PaymentManagement'));
 
 // NOT FOUND
@@ -62,11 +52,11 @@ export const routes = () => [
     path: '/',
     element: <MainLayout />,
     children: [
-      { path: '/', element: <Navigate to='dashboard' /> },
+      { path: '/', element: <Navigate to="dashboard" /> },
       // no page yet
       {
         path: 'dashboard',
-        element: <GuestGuard element={<CustomerCare />} />,
+        element: <GuestGuard element={<Dashboard />} />,
       },
       {
         path: 'potential-customers',
@@ -118,10 +108,6 @@ export const routes = () => [
         element: <GuestGuard element={<CustomerCare />} />,
       },
       {
-        path: 'q&a',
-        element: <GuestGuard element={<ManageFinanceKnowledge />} />,
-      },
-      {
         path: 'finance-support',
         element: <GuestGuard element={<FinanceKnowledge />} />,
       },
@@ -149,6 +135,7 @@ export const routes = () => [
         path: 'health-foundation',
         element: <GuestGuard element={<HealthFoundation />} />,
       },
+
     ],
   },
   // AUTHLAYOUT
@@ -156,7 +143,7 @@ export const routes = () => [
     path: '/auth',
     element: <AuthLayout />,
     children: [
-      { path: '/auth', element: <Navigate to='login' /> },
+      { path: '/auth', element: <Navigate to="login" /> },
       { path: 'login', element: <AuthGuard element={<Login />} /> },
     ],
   },
@@ -184,8 +171,17 @@ export const routes = () => [
         path: 'operation-history',
         element: <ManagerGuard element={<CustomerCare />} />,
       },
+      {
+        path: 'config-user',
+        element: <ManagerGuard element={<ConfigUser />} />,
+      },
+      {
+        path: 'q&a',
+        element: <ManagerGuard element={<ManageFinanceKnowledge />} />,
+      },
     ],
   },
+  
   // PUBLICLAYOUT
   {
     path: '',
