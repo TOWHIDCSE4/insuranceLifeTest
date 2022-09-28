@@ -172,7 +172,9 @@ const CustomerServeyTable = () => {
     const bachelorData = dataTable.find((data) => data.label === "bachelor");
     const sonData = dataTable.find((data) => data.label === "son");
     const retireData = dataTable.find((data) => data.label === "retire");
-    const doubleAssetData = dataTable.find((data) => data.label === "doubleAsset");
+    const doubleAssetData = dataTable.find(
+      (data) => data.label === "doubleAsset"
+    );
 
     const formData = {
       apptId: 0,
@@ -231,19 +233,24 @@ const CustomerServeyTable = () => {
       title: "Nền tảng của sự giàu có",
       dataIndex: "type",
       key: "type",
-      width: "25%",
+      width: "36%",
       fixed: "left",
     },
     {
       title: "infulence level",
-      width: "33%",
+      width: "26%",
       children: [
         {
           title: "Rất quan trọng",
           dataIndex: "infulence1",
           key: "infulence1",
           render: (value, record, rowIndex) => (
-            <Checkbox checked={value} value="1" onChange={handleCheckboxChangeFactory(rowIndex, "infulence1")} />
+            <Checkbox
+              className="checkbox-item"
+              checked={value}
+              value="1"
+              onChange={handleCheckboxChangeFactory(rowIndex, "infulence1")}
+            />
           ),
         },
         {
@@ -251,7 +258,12 @@ const CustomerServeyTable = () => {
           dataIndex: "infulence2",
           key: "infulence2",
           render: (value, record, rowIndex) => (
-            <Checkbox checked={value} value="2" onChange={handleCheckboxChangeFactory(rowIndex, "infulence2")} />
+            <Checkbox
+              className="checkbox-item"
+              checked={value}
+              value="2"
+              onChange={handleCheckboxChangeFactory(rowIndex, "infulence2")}
+            />
           ),
         },
         {
@@ -260,7 +272,7 @@ const CustomerServeyTable = () => {
           key: "infulence3",
           render: (value, record, rowIndex) => (
             <Checkbox
-              className="radius-5"
+              className="checkbox-item"
               checked={value}
               value="3"
               onChange={handleCheckboxChangeFactory(rowIndex, "infulence3")}
@@ -271,7 +283,7 @@ const CustomerServeyTable = () => {
     },
     {
       title: "Xây dựng vương quốc tài chính",
-      width: "34%",
+      width: "28%",
       children: [
         {
           title: "Chưa có",
@@ -279,7 +291,7 @@ const CustomerServeyTable = () => {
           key: "finance1",
           render: (value, record, rowIndex) => (
             <Checkbox
-              className="radius-5"
+              className="checkbox-item"
               checked={value}
               value="1"
               onChange={handleCheckboxChangeFactory(rowIndex, "finance1")}
@@ -292,7 +304,7 @@ const CustomerServeyTable = () => {
           key: "finance2",
           render: (value, record, rowIndex) => (
             <Checkbox
-              className="radius-5"
+              className="checkbox-item"
               checked={value}
               value="2"
               onChange={handleCheckboxChangeFactory(rowIndex, "finance2")}
@@ -317,7 +329,7 @@ const CustomerServeyTable = () => {
     {
       title: "TT ưu tiên",
       dataIndex: "prior",
-      width: "8%",
+      width: "10%",
       key: "prior",
       render: (value, record, rowIndex) => (
         <Input
@@ -332,14 +344,22 @@ const CustomerServeyTable = () => {
 
   const table = useMemo(() => {
     if (!!dataTable && dataTable.length > 0) {
-      return <TableCommon dataSource={dataTable} columnTable={columns} bordered></TableCommon>;
+      return (
+        <TableCommon
+          dataSource={dataTable}
+          columnTable={columns}
+          bordered></TableCommon>
+      );
     } else {
       return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
   }, [dataTable]);
 
   return (
-    <Form onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+    <Form
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off">
       <div>
         {/* table  */}
         <h2 className="title">{t("survey.formTitle.title1")}</h2>
@@ -356,8 +376,7 @@ const CustomerServeyTable = () => {
               value="1"
               name="receivedInheritance1"
               // checked={(e) => receivedInheritance === e.target.value}
-              onChange={handleReceivedInheritance}
-            >
+              onChange={handleReceivedInheritance}>
               Có
             </Checkbox>
           </Form.Item>
@@ -367,8 +386,7 @@ const CustomerServeyTable = () => {
               value="2"
               name="receivedInheritance2"
               // checked={(e) => receivedInheritance === e.target.value}
-              onChange={handleReceivedInheritance}
-            >
+              onChange={handleReceivedInheritance}>
               Trên 1.000.000 USD
             </Checkbox>
           </Form.Item>
@@ -378,8 +396,7 @@ const CustomerServeyTable = () => {
               value="3"
               name="receivedInheritance3"
               // checked={(e) => receivedInheritance === e.target.value}
-              onChange={handleReceivedInheritance}
-            >
+              onChange={handleReceivedInheritance}>
               Không
             </Checkbox>
           </Form.Item>
@@ -394,8 +411,7 @@ const CustomerServeyTable = () => {
               className="checkbox-item"
               value="1"
               name="financialInstrument1"
-              onChange={handleFinancialInstrument}
-            >
+              onChange={handleFinancialInstrument}>
               Vàng, đô la
             </Checkbox>
           </Form.Item>
@@ -404,8 +420,7 @@ const CustomerServeyTable = () => {
               className="checkbox-item"
               value="2"
               name="financialInstrument2"
-              onChange={handleFinancialInstrument}
-            >
+              onChange={handleFinancialInstrument}>
               Ngân hàng
             </Checkbox>
           </Form.Item>
@@ -414,8 +429,7 @@ const CustomerServeyTable = () => {
               className="checkbox-item"
               value="3"
               name="financialInstrument3"
-              onChange={handleFinancialInstrument}
-            >
+              onChange={handleFinancialInstrument}>
               Bảo hiểm
             </Checkbox>
           </Form.Item>
@@ -424,8 +438,7 @@ const CustomerServeyTable = () => {
               className="checkbox-item"
               value="4"
               name="financialInstrument4"
-              onChange={handleFinancialInstrument}
-            >
+              onChange={handleFinancialInstrument}>
               Khác
             </Checkbox>
           </Form.Item>
@@ -437,22 +450,38 @@ const CustomerServeyTable = () => {
         <h2 className="inheritance-title">{t("survey.formTitle.title4")}</h2>
         <div className="inheritance-box-2">
           <Form.Item name="ch8" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="1" name="savingMoney1" onChange={handleSavingMoney}>
+            <Checkbox
+              className="checkbox-item"
+              value="1"
+              name="savingMoney1"
+              onChange={handleSavingMoney}>
               Tiết kiệm không đều
             </Checkbox>
           </Form.Item>
           <Form.Item name="ch9" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="2" name="savingMoney2" onChange={handleSavingMoney}>
+            <Checkbox
+              className="checkbox-item"
+              value="2"
+              name="savingMoney2"
+              onChange={handleSavingMoney}>
               Mất kiểm soát chi tiêu
             </Checkbox>
           </Form.Item>
           <Form.Item name="ch10" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="3" name="savingMoney3" onChange={handleSavingMoney}>
+            <Checkbox
+              className="checkbox-item"
+              value="3"
+              name="savingMoney3"
+              onChange={handleSavingMoney}>
               Thâm hụt
             </Checkbox>
           </Form.Item>
           <Form.Item name="ch11" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="4" name="savingMoney4" onChange={handleSavingMoney}>
+            <Checkbox
+              className="checkbox-item"
+              value="4"
+              name="savingMoney4"
+              onChange={handleSavingMoney}>
               Đầu tư sai
             </Checkbox>
           </Form.Item>
@@ -464,17 +493,29 @@ const CustomerServeyTable = () => {
         <h2 className="inheritance-title">{t("survey.formTitle.title5")}</h2>
         <div className="inheritance-box-1">
           <Form.Item name="ch11" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="1" name="propertyIncome1" onChange={handlePropertyIncome}>
+            <Checkbox
+              className="checkbox-item"
+              value="1"
+              name="propertyIncome1"
+              onChange={handlePropertyIncome}>
               Đầu tư dần để có tài sản
             </Checkbox>
           </Form.Item>
           <Form.Item name="ch12" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="2" name="propertyIncome2" onChange={handlePropertyIncome}>
+            <Checkbox
+              className="checkbox-item"
+              value="2"
+              name="propertyIncome2"
+              onChange={handlePropertyIncome}>
               Mua tài sản đảm bảo không lãi thanh toán dần với 20% thu nhập
             </Checkbox>
           </Form.Item>
           <Form.Item name="ch13" valuePropName="checked">
-            <Checkbox className="checkbox-item" value="3" name="propertyIncome3" onChange={handlePropertyIncome}>
+            <Checkbox
+              className="checkbox-item"
+              value="3"
+              name="propertyIncome3"
+              onChange={handlePropertyIncome}>
               Khác
             </Checkbox>
           </Form.Item>
@@ -482,7 +523,9 @@ const CustomerServeyTable = () => {
       </div>
       <div className="container-right-submit">
         <Form.Item name="remember" valuePropName="checked">
-          <Checkbox onChange={(e) => setIsPotential(e.target.checked)}>Không còn tiềm năng</Checkbox>
+          <Checkbox onChange={(e) => setIsPotential(e.target.checked)}>
+            Không còn tiềm năng
+          </Checkbox>
         </Form.Item>
         <Form.Item>
           <ClosingModal onSubmit={onSubmit} />
