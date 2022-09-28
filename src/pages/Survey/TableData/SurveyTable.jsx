@@ -18,9 +18,6 @@ const CustomerServeyTable = () => {
   const [formValue, setFromValue] = useState({});
   const [formValues, setFromValues] = useState([]);
 
-  console.log("formValue", formValue);
-  console.log("dataTable", dataTable);
-
   //get data from redux
   const { surveys, customers } = useSelector((state) => state);
   const { selectedCustomer } = customers;
@@ -29,8 +26,6 @@ const CustomerServeyTable = () => {
   const influenceValue = influence ? JSON.parse(influence) : {};
   const priorityValue = priority ? JSON.parse(priority) : {};
   const othersValue = others ? JSON.parse(others) : {};
-
-  console.log("selectedCustomer", selectedCustomer?.customerId);
 
   const methods = useForm({
     mode: "all",
@@ -45,7 +40,21 @@ const CustomerServeyTable = () => {
   });
   const { watch, control, reset } = methods;
 
-  //generate form form data
+  //reset form after submit
+  useEffect(() => {
+    if (!isEmpty(surveys?.data)) {
+      const tableInfos = [...dataTables];
+      const formInfos = [...formValues];
+      const currentTableIndex = tableInfos?.findIndex((item) => item?.customerId === surveys?.data?.customerId);
+      const currentformIndex = formInfos?.findIndex((item) => item?.id === surveys?.data?.customerId);
+      tableInfos[currentTableIndex] = generateTableData(surveys?.data?.customerId);
+      formInfos[currentformIndex] = generateFormData(surveys?.data?.customerId);
+      setDataTables(tableInfos);
+      setFromValues(formInfos);
+    }
+  }, [surveys?.data]);
+
+  //generate form data
   useEffect(() => {
     if (isEmpty(surveys?.survey) && selectedCustomer?.customerId) {
       const formInfos = [...formValues];
@@ -60,6 +69,7 @@ const CustomerServeyTable = () => {
       setFromValues(formInfos);
     }
   }, [selectedCustomer, surveys?.survey]);
+
   useEffect(() => {
     if (isEmpty(surveys?.survey) && selectedCustomer?.customerId) {
       const dataInfos = [...dataTables];
@@ -78,7 +88,7 @@ const CustomerServeyTable = () => {
   useEffect(() => {
     const tData =
       selectedCustomer?.customerId && dataTables?.length > 0
-        ? dataTables?.find((item) => item.customerId === selectedCustomer?.customerId)
+        ? dataTables?.find((item) => item?.customerId === selectedCustomer?.customerId)
         : {};
 
     if (!isEmpty(tData)) {
@@ -216,7 +226,7 @@ const CustomerServeyTable = () => {
 
   const handleCheckboxChangeFactory = (rowIndex, columnKey) => (event) => {
     const tableInfos = [...dataTables];
-    const currentIndex = tableInfos.findIndex((item) => item.customerId === selectedCustomer?.customerId);
+    const currentIndex = tableInfos.findIndex((item) => item?.customerId === selectedCustomer?.customerId);
     const selectedTableInfo = tableInfos[currentIndex];
     const newCheckboxState = [...selectedTableInfo?.data];
 
@@ -443,8 +453,6 @@ const CustomerServeyTable = () => {
       isPotential: formValue?.isPotential,
     };
     dispatch(createSurvey(submitFormData));
-
-    console.log("form data", submitFormData);
   };
 
   return (

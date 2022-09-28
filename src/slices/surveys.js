@@ -3,7 +3,7 @@ import { addSurvey, getSurvey, getCustomerHistory, getCompanyHistory } from "../
 import { message } from "antd";
 
 const initialState = {
-  data: [],
+  data: {},
   survey: {},
   customerHistories: [],
   companyHistories: [],

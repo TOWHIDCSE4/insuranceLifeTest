@@ -1,19 +1,21 @@
-import { Modal, Table } from "antd";
+import { Modal, Spin } from "antd";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getSurveyDetails } from "../../../slices/surveys";
+
 export const HistoryModal = ({ isModalOpen, toggleModal }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = useState([]);
+  const [selectedSurvey, setSelectedSurvey] = useState("");
   const { surveys } = useSelector((state) => state);
 
   useEffect(() => {
     const historyData = surveys?.customerHistories?.map((history, i) => {
       return {
-        key: i + 1,
+        id: i + 1,
         apptId: history?.apptId,
         customerId: history?.customerId,
         surveyId: history?.surveyId,
@@ -24,36 +26,8 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
     setDataTable(historyData);
   }, [surveys.customerHistories]);
 
-  const getSurvey = (surveyId) => {
-    dispatch(getSurveyDetails(surveyId));
-    console.log("survey id", surveyId);
-  };
-
-  const columns = [
-    {
-      title: t("Date"),
-      dataIndex: "date",
-      key: "date",
-      render: (_, record) => (
-        <span onClick={() => getSurvey(record?.surveyId)} style={{ cursor: "pointer" }}>
-          {record?.date}
-        </span>
-      ),
-    },
-    {
-      title: t("Name"),
-      dataIndex: "info",
-      key: "info",
-      render: (_, record) => (
-        <span onClick={() => getSurvey(record?.surveyId)} style={{ cursor: "pointer" }}>
-          {record?.info}
-        </span>
-      ),
-    },
-  ];
-
   const handleOk = () => {
-    toggleModal();
+    dispatch(getSurveyDetails(selectedSurvey));
   };
 
   return (
@@ -63,9 +37,36 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
       onOk={handleOk}
       onCancel={toggleModal}
       className="history-modal modal-custom"
-      width={313}
+      width={360}
     >
-      {dataTable?.length && <Table dataSource={dataTable} columns={columns} pagination={false} />}
+      <div className="history-table-container">
+        <table className="history-table">
+          <thead>
+            <tr>
+              <th>{t("Date")}</th>
+              <th>{t("Name")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataTable?.length > 0 ? (
+              dataTable.map((row, i) => (
+                <tr
+                  key={row?.id}
+                  onClick={() => setSelectedSurvey(row?.surveyId)}
+                  className={`${selectedSurvey === row?.surveyId && "active-history"}`}
+                >
+                  <td>{row?.date}</td>
+                  <td>{row?.info}</td>
+                </tr>
+              ))
+            ) : (
+              <div>
+                <Spin />
+              </div>
+            )}
+          </tbody>
+        </table>
+      </div>
     </Modal>
   );
 };
