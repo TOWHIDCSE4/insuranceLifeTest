@@ -22,13 +22,13 @@
   }
 
   .history-table-container {
-    max-height: 500px;
+    max-height: 460px;
     overflow-y: scroll;
     .history-table {
       width: 100%;
       thead {
         tr {
-          background-color: #f8f8f8;
+          background-color: $secondary-color;
           th {
             padding: 10px 0px 10px 24px;
             text-align: left;
@@ -38,14 +38,14 @@
 
       tbody {
         tr {
-          border-bottom: 1px solid #e6e6e6;
+          border-bottom: 1px solid $grey-border-color;
           &:last-child {
-            border-bottom: 0px solid #e6e6e6;
+            border-bottom: 0px solid $grey-border-color;
           }
           cursor: pointer;
           &:hover {
-            background-color: #f8f8f8;
-            color: #333333;
+            background-color: $secondary-color;
+            color: $black-color;
           }
           td {
             padding: 10px 0px 10px 24px;
@@ -53,11 +53,11 @@
         }
       }
       .active-history {
-        background-color: #3cbd77;
-        color: #ffffff;
+        background-color: $green-table-bg;
+        color: $white-color;
         &:hover {
-          background-color: #42cf81;
-          color: #ffffff;
+          background-color: $green-table-bg;
+          color: $white-color;
         }
       }
     }
