@@ -1,29 +1,38 @@
-// History modal
-.history-modal {
-  .ant-modal-close {
-    display: none;
-  }
-
-  .ant-modal-footer {
-    position: relative;
-    top: -14px;
-    .ant-btn {
-      margin-top: 10px;
-      width: 127px;
+// History popup
+.history-popover {
+  width: 313px;
+  font-family: "Quicksand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  color: $black-color;
+  box-sizing: border-box;
+  .ant-popover-content {
+    .ant-popover-inner {
+      .ant-popover-title {
+        font-family: "Quicksand";
+        font-style: normal;
+        font-weight: 600;
+        padding: 15px 0px 15px 18px;
+        font-size: 16px;
+        line-height: 20px;
+      }
+      .ant-popover-inner-content {
+        padding: 0px !important;
+      }
     }
-    .ant-btn-default {
-      position: relative;
-      left: -10px;
-    }
   }
-  .ant-modal-body {
-    padding: 0px 0px 30px 0px;
-    overflow: hidden;
-  }
-
   .history-table-container {
-    max-height: 460px;
-    overflow-y: scroll;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-bottom: 16px;
+    .table-spainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 24px;
+    }
     .history-table {
       width: 100%;
       thead {
@@ -31,33 +40,28 @@
           background-color: $secondary-color;
           th {
             padding: 10px 0px 10px 24px;
-            text-align: left;
+            &:last-child {
+              text-align: left;
+            }
           }
         }
       }
-
       tbody {
         tr {
+          text-align: left;
           border-bottom: 1px solid $grey-border-color;
           &:last-child {
             border-bottom: 0px solid $grey-border-color;
           }
           cursor: pointer;
           &:hover {
-            background-color: $secondary-color;
-            color: $black-color;
+            background-color: $green-table-bg;
+            color: $white-color;
           }
           td {
+            width: 150px;
             padding: 10px 0px 10px 24px;
           }
-        }
-      }
-      .active-history {
-        background-color: $green-table-bg;
-        color: $white-color;
-        &:hover {
-          background-color: $green-table-bg;
-          color: $white-color;
         }
       }
     }
