@@ -34,7 +34,7 @@ const CustomerServeyTable = () => {
       other2: [],
       other3: [],
       other4: [],
-      potential: false,
+      isPotential: false,
       hintName: "",
     },
   });
@@ -108,7 +108,7 @@ const CustomerServeyTable = () => {
         other2: fData?.others?.other1,
         other3: fData?.others?.other1,
         other4: fData?.others?.other1,
-        potential: fData?.isPotential,
+        isPotential: fData?.isPotential,
         hintName: fData?.hintName,
       });
     }
@@ -119,7 +119,7 @@ const CustomerServeyTable = () => {
   const watchOther2 = watch("other2", []);
   const watchOther3 = watch("other3", []);
   const watchOther4 = watch("other4", []);
-  const watchPotential = watch("potential", false);
+  const watchPotential = watch("isPotential", false);
   const watchHintName = watch("hintName", "");
 
   useEffect(() => {
@@ -467,7 +467,7 @@ const CustomerServeyTable = () => {
         {isEmpty(surveys?.survey) && (
           <div className="container-right-submit">
             <div>
-              <CheckboxControl control={control} name="potential" label="Không còn tiềm năng" />
+              <CheckboxControl control={control} name="isPotential" label="Không còn tiềm năng" />
             </div>
             <div>
               <ClosingModal onSubmit={onSubmit} />
