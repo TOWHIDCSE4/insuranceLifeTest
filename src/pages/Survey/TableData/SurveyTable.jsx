@@ -20,7 +20,7 @@ const CustomerServeyTable = () => {
   const { selectedCustomer } = customers;
   const { survey } = surveys;
 
-  console.log("survey11", survey);
+  console.log("survey11", surveys);
   useEffect(() => {
     const generateRowData = [
       {

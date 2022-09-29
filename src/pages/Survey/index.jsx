@@ -9,6 +9,8 @@ import TabMenu from "./Tabs/TabMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerHistoryById } from "../../slices/surveys";
 import { getCustomerList, setSelectedCustomer } from "../../slices/customers";
+import HistoryModal2 from "./Modals/HistoryModal2";
+import { CUSTOMER_CARE_INFO } from "../../ultis/constant";
 
 const Survey = () => {
   const { t } = useTranslation();
@@ -92,12 +94,17 @@ const Survey = () => {
                   <div className="container-right">
                     <div className="container-right-header">
                       <div>
-                        <Button
+                        <HistoryModal2
+                          options={CUSTOMER_CARE_INFO}
+
+                          // setPayload={setOptionsFilter}
+                        />
+                        {/* <Button
                           type="primary"
                           className="btn-primary"
                           onClick={historyHandler}>
                           {t("common.history")}
-                        </Button>
+                        </Button> */}
                       </div>
                       <div className="right">
                         <Button
@@ -136,10 +143,10 @@ const Survey = () => {
           </Row>
         </div>
       </div>
-      <HistoryModal
+      {/* <HistoryModal
         isModalOpen={isHistoryModalOpen}
         toggleModal={toggleHistoryModal}
-      />
+      /> */}
     </Fragment>
   );
 };

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getSurveyDetails } from "../../../slices/surveys";
-export const HistoryModal = ({ isModalOpen, toggleModal }) => {
+export const HistoryModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = useState([]);
@@ -35,7 +35,9 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
       dataIndex: "date",
       key: "date",
       render: (_, record) => (
-        <span onClick={() => getSurvey(record?.surveyId)} style={{ cursor: "pointer" }}>
+        <span
+          onClick={() => getSurvey(record?.surveyId)}
+          style={{ cursor: "pointer" }}>
           {record?.date}
         </span>
       ),
@@ -45,27 +47,28 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
       dataIndex: "info",
       key: "info",
       render: (_, record) => (
-        <span onClick={() => getSurvey(record?.surveyId)} style={{ cursor: "pointer" }}>
+        <span
+          onClick={() => getSurvey(record?.surveyId)}
+          style={{ cursor: "pointer" }}>
           {record?.info}
         </span>
       ),
     },
   ];
 
-  const handleOk = () => {
-    toggleModal();
-  };
+  // const handleOk = () => {
+  //   toggleModal();
+  // };
+  console.log(dataTable);
 
   return (
-    <Modal
+    <div
       title="Lịch sử khảo sát"
-      open={isModalOpen}
-      onOk={handleOk}
-      onCancel={toggleModal}
       className="history-modal modal-custom"
-      width={313}
-    >
-      {dataTable?.length && <Table dataSource={dataTable} columns={columns} pagination={false} />}
-    </Modal>
+      width={313}>
+      {dataTable?.length && (
+        <Table dataSource={dataTable} columns={columns} pagination={false} />
+      )}
+    </div>
   );
 };
