@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { getSurveyDetails } from "../../../slices/surveys";
 import { getTimeByTZ } from "../../../helper/index";
+import { isEmpty } from "lodash";
 
 export const HistoryModal = ({ isModalOpen, toggleModal }) => {
   const { t } = useTranslation();
@@ -25,6 +26,12 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
     });
     setDataTable(historyData);
   }, [surveys.customerHistories]);
+
+  useEffect(() => {
+    if (!isEmpty(surveys?.survey)) {
+      toggleModal();
+    }
+  }, [surveys?.survey]);
 
   const handleOk = () => {
     dispatch(getSurveyDetails(selectedSurvey));
