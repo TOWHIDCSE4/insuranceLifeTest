@@ -12,6 +12,7 @@ import { isEmpty } from "lodash";
 import calender from "../../assets/images/icons/calendar.svg";
 import left_arrow from "../../assets/images/icons/left-arrow.svg";
 import { HistoryPopup } from "./Modals/HistoryPopup";
+import { getTimeByTZ } from "../../helper/index";
 
 const Survey = () => {
   const { t } = useTranslation();
@@ -102,7 +103,7 @@ const Survey = () => {
                         </div>
                         <div className="right">
                           <img src={calender} alt="calender" height={16} style={{ marginRight: "5px" }} />
-                          <span>Ngày: 12/08/2022</span>
+                          <span>Ngày: {surveys?.survey?.createdAt ? getTimeByTZ(surveys?.survey?.createdAt) : ""}</span>
                         </div>
                       </div>
                     )}
