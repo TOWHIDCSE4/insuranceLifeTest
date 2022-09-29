@@ -1,4 +1,4 @@
-import { Modal, Spin } from "antd";
+import { Modal, Spin, message } from "antd";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -34,7 +34,11 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
   }, [surveys?.survey]);
 
   const handleOk = () => {
-    dispatch(getSurveyDetails(selectedSurvey));
+    if (selectedSurvey) {
+      dispatch(getSurveyDetails(selectedSurvey));
+    } else {
+      message.error("Please select record");
+    }
   };
 
   return (
