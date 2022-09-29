@@ -2,8 +2,8 @@ import { Modal, Spin } from "antd";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
 import { getSurveyDetails } from "../../../slices/surveys";
+import { getTimeByTZ } from "../../../helper/index";
 
 export const HistoryModal = ({ isModalOpen, toggleModal }) => {
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ export const HistoryModal = ({ isModalOpen, toggleModal }) => {
         apptId: history?.apptId,
         customerId: history?.customerId,
         surveyId: history?.surveyId,
-        date: moment(history?.createdAt).format("DD/MM/YYYY"),
+        date: getTimeByTZ(history?.createdAt),
         info: history?.hintName,
       };
     });
