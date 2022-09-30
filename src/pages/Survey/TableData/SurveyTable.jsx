@@ -299,32 +299,45 @@ const CustomerServeyTable = () => {
       children: [
         {
           title: "Rất quan trọng",
-          dataIndex: "infulence1",
-          key: "infulence1",
-          render: (value, record, rowIndex) => (
-            <Checkbox checked={value} value="1" onChange={handleCheckboxChangeFactory(rowIndex, "infulence1")} />
-          ),
+
+          children: [
+            {
+              dataIndex: "infulence1",
+              key: "infulence1",
+              render: (value, record, rowIndex) => (
+                <Checkbox checked={value} value="1" onChange={handleCheckboxChangeFactory(rowIndex, "infulence1")} />
+              ),
+            },
+          ],
         },
         {
           title: "Quan trọng",
-          dataIndex: "infulence2",
-          key: "infulence2",
-          render: (value, record, rowIndex) => (
-            <Checkbox checked={value} value="2" onChange={handleCheckboxChangeFactory(rowIndex, "infulence2")} />
-          ),
+          children: [
+            {
+              dataIndex: "infulence2",
+              key: "infulence2",
+              render: (value, record, rowIndex) => (
+                <Checkbox checked={value} value="2" onChange={handleCheckboxChangeFactory(rowIndex, "infulence2")} />
+              ),
+            },
+          ],
         },
         {
           title: "Ít quan trọng",
-          dataIndex: "infulence3",
-          key: "infulence3",
-          render: (value, record, rowIndex) => (
-            <Checkbox
-              className="radius-5"
-              checked={value}
-              value="3"
-              onChange={handleCheckboxChangeFactory(rowIndex, "infulence3")}
-            />
-          ),
+          children: [
+            {
+              dataIndex: "infulence3",
+              key: "infulence3",
+              render: (value, record, rowIndex) => (
+                <Checkbox
+                  className="radius-5"
+                  checked={value}
+                  value="3"
+                  onChange={handleCheckboxChangeFactory(rowIndex, "infulence3")}
+                />
+              ),
+            },
+          ],
         },
       ],
     },
@@ -334,42 +347,54 @@ const CustomerServeyTable = () => {
       children: [
         {
           title: "Chưa có",
-          dataIndex: "finance1",
-          key: "finance1",
-          render: (value, record, rowIndex) => (
-            <Checkbox
-              className="radius-5"
-              checked={value}
-              value="1"
-              onChange={handleCheckboxChangeFactory(rowIndex, "finance1")}
-            />
-          ),
+          children: [
+            {
+              dataIndex: "finance1",
+              key: "finance1",
+              render: (value, record, rowIndex) => (
+                <Checkbox
+                  className="radius-5"
+                  checked={value}
+                  value="1"
+                  onChange={handleCheckboxChangeFactory(rowIndex, "finance1")}
+                />
+              ),
+            },
+          ],
         },
         {
           title: "Đã có",
-          dataIndex: "finance2",
-          key: "finance2",
-          render: (value, record, rowIndex) => (
-            <Checkbox
-              className="radius-5"
-              checked={value}
-              value="2"
-              onChange={handleCheckboxChangeFactory(rowIndex, "finance2")}
-            />
-          ),
+          children: [
+            {
+              dataIndex: "finance2",
+              key: "finance2",
+              render: (value, record, rowIndex) => (
+                <Checkbox
+                  className="radius-5"
+                  checked={value}
+                  value="2"
+                  onChange={handleCheckboxChangeFactory(rowIndex, "finance2")}
+                />
+              ),
+            },
+          ],
         },
         {
           title: "Số tiền (1000đ)",
-          dataIndex: "money",
-          key: "money",
-          render: (value, record, rowIndex) => (
-            <Input
-              style={{ backgroundColor: "#F8F8F8", border: 0 }}
-              className="radius-10"
-              value={value}
-              onChange={handleInput(rowIndex, "money")}
-            />
-          ),
+          children: [
+            {
+              dataIndex: "money",
+              key: "money",
+              render: (value, record, rowIndex) => (
+                <Input
+                  style={{ backgroundColor: "#F8F8F8", border: 0 }}
+                  className="radius-10"
+                  value={value}
+                  onChange={handleInput(rowIndex, "money")}
+                />
+              ),
+            },
+          ],
         },
       ],
     },
