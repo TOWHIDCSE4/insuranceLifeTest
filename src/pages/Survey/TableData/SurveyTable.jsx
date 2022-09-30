@@ -299,7 +299,6 @@ const CustomerServeyTable = () => {
       children: [
         {
           title: "Rất quan trọng",
-
           children: [
             {
               dataIndex: "infulence1",

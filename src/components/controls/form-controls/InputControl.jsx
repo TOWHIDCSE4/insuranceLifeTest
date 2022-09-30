@@ -22,7 +22,7 @@ const InputControl = ({
         name={name}
         render={({ field }) => (
           <Input
-            allowClear
+            allowClear={false}
             {...field}
             type={type}
             id={name}

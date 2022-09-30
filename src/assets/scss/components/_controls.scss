@@ -21,11 +21,32 @@
 .form-label {
   color: $black-color !important;
   font-weight: 600;
-  padding-bottom: 5px;
+  padding-bottom: 7px;
 }
 
 .error-msg {
   margin: 5px 0px 5px 0px;
   font-size: 10px;
   color: $red-color;
+}
+
+.select-control {
+  display: block;
+  width: 100%;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  position: relative;
+  background: #f8f8f8 !important;
+  border-radius: 5px !important;
+  border: 0px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  &:focus-within {
+    border: 1px solid $green-table-bg !important;
+  }
+}
+.date-picker-control {
+  &:focus-within {
+    border: 1px solid $green-table-bg !important;
+  }
 }

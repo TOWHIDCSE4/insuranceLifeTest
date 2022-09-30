@@ -1,6 +1,7 @@
 import { Tabs } from "antd";
 import React from "react";
 import SurveyTable from "../TableData/SurveyTable";
+import { PersonalInfoForm } from "../TableData/PersonalInfoForm";
 
 const TabMenu = () => {
   return (
@@ -10,7 +11,7 @@ const TabMenu = () => {
           <SurveyTable />
         </Tabs.TabPane>
         <Tabs.TabPane tab="II. Thông tin cá nhân" key="2">
-          II. Thông tin cá nhân
+          <PersonalInfoForm />
         </Tabs.TabPane>
       </Tabs>
     </div>
