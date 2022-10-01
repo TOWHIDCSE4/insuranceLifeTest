@@ -2,6 +2,7 @@ import { Button, Card } from "antd";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import DotImg from "../../assets/images/icons/dot.svg";
 
 const ListDetails = () => {
   const { t } = useTranslation();
@@ -44,17 +45,17 @@ const ListDetails = () => {
         if (page === 2) {
           return procedure;
         } else {
-          return dialouges?.length > 0 ? "yes dialog1" : "";
+          return dialouges?.length > 0 ? <DialogItem dialouges={dialouges} /> : "";
         }
       }
     } else if (!objective && procedure) {
       if (page === 1) {
         return procedure;
       } else {
-        return dialouges?.length > 0 ? "yes dialog2" : "";
+        return dialouges?.length > 0 ? <DialogItem dialouges={dialouges} /> : "";
       }
     } else if (!objective && !procedure && dialouges?.length > 0) {
-      return "yes dialog 3";
+      return <DialogItem dialouges={dialouges} />;
     } else {
       return "";
     }
@@ -109,3 +110,11 @@ const ListDetails = () => {
 };
 
 export default ListDetails;
+
+const DialogItem = ({ dialouges }) => {
+  return dialouges?.map((dialog, i) => (
+    <div key={i}>
+      <img src={DotImg} alt="dot" /> <span> {dialog?.text}</span>
+    </div>
+  ));
+};
