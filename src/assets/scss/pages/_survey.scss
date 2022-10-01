@@ -244,11 +244,10 @@
         }
       }
       &-content {
-        padding-top: 21px;
-
+        // padding: 21px 0px;
         .contents {
-          padding-left: 29px;
-          padding-right: 29px;
+          padding: 20px 29px;
+          // padding-right: 29px;
 
           p {
             font-family: "Quicksand";

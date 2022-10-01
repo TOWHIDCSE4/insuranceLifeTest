@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addSurvey, getSurvey, getCustomerHistory, getCompanyHistory } from "../services/surveys";
+import { addSurvey, getSurvey, getCustomerHistory, getCompanyHistory, getSpeechScript } from "../services/surveys";
 import { message } from "antd";
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
   survey: {},
   customerHistories: [],
   companyHistories: [],
+  surveyScript: {},
   isLoading: false,
   isError: false,
   error: "",
@@ -53,6 +54,14 @@ export const getCompanyHistoryById = createAsyncThunk("surveys/company-history",
   }
 });
 
+export const getSppechScriptInfo = createAsyncThunk("surveys/speech-script", async () => {
+  try {
+    const res = await getSpeechScript();
+    return res.data;
+  } catch (error) {
+    return Promise.reject(error.data);
+  }
+});
 const surveySlice = createSlice({
   name: "surveys",
   initialState,
@@ -118,12 +127,17 @@ const surveySlice = createSlice({
       state.companyHistories = action.payload;
       state.error = "";
     });
-    builder.addCase(getCompanyHistoryById.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
-      state.error = action.error?.message;
-      state.companyHistories = [];
-    });
+    builder
+      .addCase(getCompanyHistoryById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.error?.message;
+        state.companyHistories = [];
+      })
+
+      .addCase(getSppechScriptInfo.fulfilled, (state, action) => {
+        state.surveyScript = action.payload;
+      });
   },
 });
 

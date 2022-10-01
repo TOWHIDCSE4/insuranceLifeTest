@@ -1,4 +1,4 @@
-import { Button, Col, Layout, List, Row, Typography } from "antd";
+import { Button, Col, Layout, List, Row, Typography, Spin } from "antd";
 import React, { Fragment, useEffect, useState } from "react";
 import SearchInputBox from "./SearchInputBox";
 import ListDetails from "./ListDetails";
@@ -13,6 +13,7 @@ import calender from "../../assets/images/icons/calendar.svg";
 import left_arrow from "../../assets/images/icons/left-arrow.svg";
 import { HistoryPopup } from "./Modals/HistoryPopup";
 import { getTimeByTZ } from "../../helper/index";
+import { getSppechScriptInfo } from "../../slices/surveys";
 
 const Survey = () => {
   const { t } = useTranslation();
@@ -21,9 +22,11 @@ const Survey = () => {
   const [payload, setPayload] = useState("");
   const { customers, surveys } = useSelector((state) => state);
   const { data, selectedCustomer } = customers;
+  const { objective, procedure, dialouges } = surveys?.surveyScript;
 
   useEffect(() => {
     dispatch(getCustomerList());
+    dispatch(getSppechScriptInfo());
   }, [dispatch]);
 
   useEffect(() => {
@@ -114,13 +117,19 @@ const Survey = () => {
               </Layout.Content>
             </Col>
 
-            <Col lg={9} md={24} sm={24} xs={24}>
-              <Layout.Content className="manageContent">
-                <div className="content-div-2">
-                  <ListDetails />
-                </div>
-              </Layout.Content>
-            </Col>
+            {objective || procedure || dialouges?.length > 0 ? (
+              <Col lg={9} md={24} sm={24} xs={24}>
+                <Layout.Content className="manageContent">
+                  <div className="content-div-2">
+                    <ListDetails />
+                  </div>
+                </Layout.Content>
+              </Col>
+            ) : (
+              <div>
+                <Spin />
+              </div>
+            )}
           </Row>
         </div>
       </div>
