@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Input, FieldLabel, CheckboxGroup, Select, DatePicker } from "../../../components/controls";
+import { Input, FieldLabel, CheckboxGroup, DatePicker } from "../../../components/controls";
 import { Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { editCustomer } from "../../../slices/customers";
@@ -8,7 +8,7 @@ import { editCustomer } from "../../../slices/customers";
 export const PersonalInfoForm = () => {
   const dispatch = useDispatch();
   const { customers } = useSelector((state) => state);
-
+  const selectedCustomer = customers?.selectedCustomer || {};
   const { control, handleSubmit } = useForm({
     mode: "all",
     defaultValues: {
@@ -18,9 +18,34 @@ export const PersonalInfoForm = () => {
     },
   });
 
-  console.log("customers123", customers);
   const onSubmit = (data) => {
-    console.log("info form", data);
+    const formData = {
+      typeId: 1,
+      maritalStatus: 1,
+      acquaintanceLevel: 1,
+      gender: 1,
+      name: data?.fullName,
+      phone1: data?.phone,
+      phone2: "",
+      phone3: "",
+      income: "123456",
+      dob: data?.dob?._d,
+      job: data?.job,
+      companyText: "",
+      companyId: 0,
+      email: "demo@gmail.com",
+      address: data?.address,
+      contractNumber: "",
+      note: "",
+      isPotential: true,
+      concerns: "",
+      size: 0,
+      hobby: data?.interests,
+      childrenNum: +data?.numOfChildren,
+      dependentsNum: +data?.numOfDependents,
+    };
+
+    dispatch(editCustomer({ id: selectedCustomer?.customerId, data: formData }));
   };
 
   return (
