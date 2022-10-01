@@ -462,7 +462,6 @@
 }
 
 //new styles
-
 .other-box {
   border: 1px solid $grey-border-color;
   padding: 10px;
@@ -470,7 +469,6 @@
   display: grid;
   justify-content: space-between;
 }
-
 .other-box1 {
   @extend .other-box;
   .ant-checkbox-group-item {
@@ -483,7 +481,6 @@
     margin-right: 10px;
   }
 }
-
 .table-common .ant-table-thead tr th {
   padding: 0px 10px;
 }
@@ -506,13 +503,32 @@
         }
       }
     }
-
     .personal-checkbox {
       padding-left: 10px;
     }
-
     .personal-date {
       width: 280px;
+    }
+  }
+  .info-footer {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 10px;
+    .info-btn {
+      width: 127px;
+      .btn-cancel {
+        @extend %btn-bg-white;
+        color: $red-color;
+        border: 1px solid $red-color;
+        &:hover,
+        &:active,
+        &:focus {
+          @extend %btn-bg-white;
+          color: $red-color;
+          border: 1px solid $red-color;
+          opacity: 0.7;
+        }
+      }
     }
   }
 }

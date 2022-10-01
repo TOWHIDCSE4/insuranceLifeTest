@@ -1,9 +1,15 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Input, FieldLabel, CheckboxGroup, Select, DatePicker } from "../../../components/controls";
+import { Button } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { editCustomer } from "../../../slices/customers";
 
 export const PersonalInfoForm = () => {
-  const { control } = useForm({
+  const dispatch = useDispatch();
+  const { customers } = useSelector((state) => state);
+
+  const { control, handleSubmit } = useForm({
     mode: "all",
     defaultValues: {
       fullName: "Nguyễn Văn Tie",
@@ -11,9 +17,15 @@ export const PersonalInfoForm = () => {
       familyStatus: [1],
     },
   });
+
+  console.log("customers123", customers);
+  const onSubmit = (data) => {
+    console.log("info form", data);
+  };
+
   return (
     <div className="personal-info-container">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <table className="personal-info-table">
           <tr>
             <td>
@@ -38,9 +50,9 @@ export const PersonalInfoForm = () => {
 
           <tr>
             <td>
-              <FieldLabel name="job" label="Nghề nghiệp" />
-              <div style={{ marginTop: "5px" }}>
-                <Select control={control} name="job" options={[]} placeholder="Chọn" />
+              <div>
+                <FieldLabel name="job" label="Nghề nghiệp" />
+                <Input control={control} name="job" placeholder="Chọn" />
               </div>
             </td>
             <td colSpan={2}>
@@ -89,6 +101,19 @@ export const PersonalInfoForm = () => {
             </td>
           </tr>
         </table>
+        <div className="info-footer">
+          <div className="info-btn">
+            <Button htmlType="button" className="btn-cancel" block>
+              Hủy+
+            </Button>
+          </div>
+
+          <div className="info-btn">
+            <Button type="primary" htmlType="submit" className="btn-primary" block>
+              Tạo
+            </Button>
+          </div>
+        </div>
       </form>
     </div>
   );
@@ -124,3 +149,29 @@ const familyStatus = [
     value: 3,
   },
 ];
+
+// const jobs = [
+//   {
+//     id: 1,
+//     label: "Engineer",
+//     value: "engineer",
+//   },
+//   {
+//     id: 2,
+//     label: "Service Holder",
+//     value: "service_holder",
+//   },
+//   {
+//     id: 3,
+//     label: "Business man",
+//     value: "business_man",
+//   },
+//   {
+//     id: 4,
+//     label: "Doctor",
+//     value: "doctor",
+//   },
+// ];
+{
+  /* <Select control={control} name="job" options={jobs} placeholder="Chọn" /> */
+}

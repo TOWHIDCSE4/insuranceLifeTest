@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { Controller } from "react-hook-form";
 import { DatePicker } from "antd";
 import moment from "moment";
@@ -13,7 +13,7 @@ const DatePickerControl = ({
   errors,
   defaultValue,
   isDisabled = false,
-  placeholder = "12/08/2022",
+  placeholder = "DD/08/2022",
   format = "DD/MM/YYYY",
   className = "",
   allowClear = false,
@@ -37,7 +37,7 @@ const DatePickerControl = ({
             placeholder={placeholder}
             placement={"bottomLeft"}
             format={format}
-            disabledDate={disabledDate}
+            // disabledDate={disabledDate}
           />
         )}
       />
