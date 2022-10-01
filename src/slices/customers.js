@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getCustomers, updateCustomer } from "../services/customers";
+import {message} from 'antd'
 
 const initialState = {
   data: [],
