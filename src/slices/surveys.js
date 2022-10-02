@@ -11,13 +11,14 @@ const initialState = {
   isLoading: false,
   isError: false,
   error: "",
+  isClearSurvey: false,
 };
 
 export const createSurvey = createAsyncThunk("surveys/create", async (data) => {
   try {
     const res = await addSurvey(data);
     if (res?.status === 201 || res?.status === 200) {
-      message.success("Survey record save successfully");
+      message.success("Lưu khảo sát thành công");
       return res.data;
     } else {
       message.error("Something went wrong");
@@ -65,6 +66,12 @@ export const getSppechScriptInfo = createAsyncThunk("surveys/speech-script", asy
 const surveySlice = createSlice({
   name: "surveys",
   initialState,
+  reducers: {
+    clearSurvey: (state) => {
+      state.survey = {};
+      state.isClearSurvey = true;
+    },
+  },
   extraReducers: (builder) => {
     // add servey
     builder.addCase(createSurvey.pending, (state) => {
@@ -141,6 +148,7 @@ const surveySlice = createSlice({
   },
 });
 
+export const { clearSurvey } = surveySlice.actions;
 const { reducer } = surveySlice;
 
 export default reducer;

@@ -64,9 +64,9 @@ const ListDetails = () => {
     <Card className="content-div-2-header" title={t("survey.rttitle")}>
       <div className="content-div-2-content">
         <div className="content-body">
-          {/* <Button type="primary" htmlType="submit" className="btn-primary">
-            Lời thoại 1
-          </Button> */}
+          <Button type="primary" htmlType="submit" className="btn-primary">
+            Lời thoại {page}
+          </Button>
           <div className="contents">{getContent(page)}</div>
         </div>
 

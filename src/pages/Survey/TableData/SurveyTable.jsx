@@ -18,10 +18,13 @@ const CustomerServeyTable = () => {
   const [formValue, setFromValue] = useState({});
   const [formValues, setFromValues] = useState([]);
 
+  console.log("formValues", formValues);
+
   //get data from redux
   const { surveys, customers } = useSelector((state) => state);
   const { selectedCustomer } = customers;
-  const { finance, influence, priority, others, ...value } = surveys?.survey;
+  const { survey, isClearSurvey } = surveys;
+  const { finance, influence, priority, others, ...value } = survey;
   const financeValue = finance ? JSON.parse(finance) : {};
   const influenceValue = influence ? JSON.parse(influence) : {};
   const priorityValue = priority ? JSON.parse(priority) : {};
@@ -40,9 +43,28 @@ const CustomerServeyTable = () => {
   });
   const { watch, control, reset } = methods;
 
+  //back to reset data
+
+  useEffect(() => {
+    if (isClearSurvey && formValues?.length > 0) {
+      const formInfos = [...formValues];
+      const currentIndex = formInfos?.findIndex((item) => item?.id === selectedCustomer?.customerId);
+      const selectedFormInfo = formInfos[currentIndex];
+      selectedFormInfo["hintName"] = "";
+      selectedFormInfo["isPotential"] = false;
+      selectedFormInfo["others"]["other1"] = [];
+      selectedFormInfo["others"]["other2"] = [];
+      selectedFormInfo["others"]["other3"] = [];
+      selectedFormInfo["others"]["other4"] = [];
+      formInfos[currentIndex] = selectedFormInfo;
+      setFromValues(formInfos);
+    }
+  }, [isClearSurvey]);
+
   //reset form after submit
   useEffect(() => {
     if (!isEmpty(surveys?.data)) {
+      console.log("isClearSurvey", isClearSurvey);
       const tableInfos = [...dataTables];
       const formInfos = [...formValues];
       const currentTableIndex = tableInfos?.findIndex((item) => item?.customerId === surveys?.data?.customerId);
@@ -137,7 +159,7 @@ const CustomerServeyTable = () => {
     }
   }, [watchOther1, watchOther2, watchOther3, watchOther4, watchPotential, watchHintName]);
 
-  // for survey details
+  // for   details
   useEffect(() => {
     if (!isEmpty(surveys?.survey)) {
       const tableData = [
@@ -220,6 +242,15 @@ const CustomerServeyTable = () => {
         other4: othersValue?.ans4,
         potential: value?.isPotential,
         hintName: value?.hintName,
+      });
+    } else {
+      reset({
+        other1: [],
+        other2: [],
+        other3: [],
+        other4: [],
+        potential: false,
+        hintName: "",
       });
     }
   }, [surveys?.survey]);
@@ -487,18 +518,6 @@ const CustomerServeyTable = () => {
           <div className="">{table}</div>
         </div>
         <SurveyForm />
-
-        {/* {isEmpty(surveys?.survey) && (
-          <div className="container-right-submit">
-            <div>
-              <CheckboxControl control={control} name="isPotential" label="Không còn tiềm năng" />
-            </div>
-            <div>
-              <ClosingModal onSubmit={onSubmit} />
-            </div>
-          </div>
-        )} */}
-
         <div className={`container-right-submit ${!isEmpty(surveys?.survey) && "content-hide"}`}>
           <div>
             <CheckboxControl control={control} name="isPotential" label="Không còn tiềm năng" />

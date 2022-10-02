@@ -41,6 +41,7 @@ const customerSlice = createSlice({
     setSelectedCustomer: (state, action) => {
       state.selectedCustomer = state.data?.find((customaer) => customaer?.customerId === action.payload);
     },
+    
   },
   extraReducers: (builder) => {
     builder

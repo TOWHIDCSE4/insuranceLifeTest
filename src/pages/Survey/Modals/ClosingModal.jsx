@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Popover, Divider } from "antd";
 import { useTranslation } from "react-i18next";
 import { useFormContext } from "react-hook-form";
 import { Input, FieldLabel } from "../../../components/controls";
+import { useSelector } from "react-redux";
+import { isEmpty } from "lodash";
 
 export const ClosingModal = ({ onSubmit }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { control } = useFormContext();
+  const { data } = useSelector((state) => state?.surveys);
+
+  console.log("survey data", data);
+
+  useEffect(() => {
+    if (!isEmpty(data)) {
+      onCancel();
+    }
+  }, [data]);
 
   const handleOpenChange = (newOpen) => {
     setOpen(newOpen);
