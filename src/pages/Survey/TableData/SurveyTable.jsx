@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Checkbox, Empty, Input } from "antd";
+import { Checkbox, Empty, Input, message } from "antd";
 import TableCommon from "../../../components/common/TableNormal";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, FormProvider } from "react-hook-form";
@@ -507,7 +507,12 @@ const CustomerServeyTable = () => {
       hintName: formValue?.hintName,
       isPotential: formValue?.isPotential,
     };
-    dispatch(createSurvey(submitFormData));
+
+    if (formValue?.hintName) {
+      dispatch(createSurvey(submitFormData));
+    } else {
+      message.error("Hint Name is required");
+    }
   };
 
   return (
